@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>溺愛度診断 by aicha</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=Kiwi+Maru:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFF8F0;
+  --card: #FFFFFF;
+  --primary: #D4736C;
+  --primary-dark: #B85A54;
+  --primary-light: #F2D0CD;
+  --accent: #E8A87C;
+  --gold: #C4A265;
+  --text: #3D2C2E;
+  --text-light: #8B7072;
+  --text-muted: #BDA5A7;
+  --danger: #E74C6F;
+  --safe: #7BC67E;
+  --shadow: 0 4px 24px rgba(61,44,46,0.08);
+  --shadow-lg: 0 12px 48px rgba(61,44,46,0.12);
+  --radius: 20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Zen Maru Gothic',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+.bg-hearts{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-hearts span{position:absolute;display:block;font-size:20px;opacity:0.06;animation:floatUp linear infinite}
+@keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:0.06}90%{opacity:0.06}100%{transform:translateY(-10vh) rotate(360deg);opacity:0}}
+
+.container{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:20px 16px 40px;min-height:100vh}
+.screen{display:none;animation:fadeIn .5s ease}.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 20px rgba(212,115,108,0.2)}50%{box-shadow:0 0 40px rgba(212,115,108,0.4)}}
+@keyframes cardReveal{0%{opacity:0;transform:scale(0.8) rotateY(20deg)}100%{opacity:1;transform:scale(1) rotateY(0deg)}}
+
+.intro-header{text-align:center;padding:48px 0 24px}
+.brand-tag{display:inline-block;font-size:11px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px}
+.intro-header h1{font-size:32px;font-weight:900;line-height:1.3;background:linear-gradient(135deg,var(--primary) 0%,var(--danger) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.intro-header h1 span{display:block;font-size:14px;font-weight:500;color:var(--text-light);-webkit-text-fill-color:var(--text-light);margin-top:4px}
+.intro-subtitle{text-align:center;font-size:13px;color:var(--text-light);line-height:1.8;margin:16px 0 24px;font-family:'Kiwi Maru',serif}
+.theory-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:16px 0 32px}
+.theory-badge{font-size:10px;padding:4px 10px;border-radius:20px;background:var(--primary-light);color:var(--primary-dark);font-weight:500;letter-spacing:0.5px}
+
+.mode-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
+.mode-card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);cursor:pointer;transition:all .3s;border:2px solid transparent;position:relative;overflow:hidden}
+.mode-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.mode-card.selected{border-color:var(--primary)}
+.mode-emoji{font-size:28px;margin-bottom:8px}
+.mode-title{font-size:16px;font-weight:700;margin-bottom:4px}
+.mode-desc{font-size:12px;color:var(--text-light);line-height:1.6}
+
+.btn{display:block;width:100%;padding:16px;border:none;border-radius:14px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;text-align:center}
+.btn-primary{background:linear-gradient(135deg,var(--primary) 0%,var(--danger) 100%);color:#fff;box-shadow:0 4px 16px rgba(212,115,108,0.3)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(212,115,108,0.4)}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.btn-secondary{background:var(--card);color:var(--primary);border:2px solid var(--primary-light)}
+
+.progress-area{margin-bottom:24px}
+.progress-bar-wrap{height:6px;background:var(--primary-light);border-radius:3px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--danger));border-radius:3px;transition:width .4s ease}
+.progress-text{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--text-muted)}
+.q-card{background:var(--card);border-radius:var(--radius);padding:28px 24px;box-shadow:var(--shadow);margin-bottom:20px;animation:slideIn .4s ease}
+.q-category{font-size:10px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.q-number{font-size:12px;color:var(--text-muted);margin-bottom:12px}
+.q-text{font-size:17px;font-weight:700;line-height:1.6;margin-bottom:24px}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;border:2px solid #F0E6E7;cursor:pointer;transition:all .25s;font-size:14px;line-height:1.5}
+.option:hover{border-color:var(--primary-light);background:#FFF5F3}
+.option.selected{border-color:var(--primary);background:#FFF0EE}
+.option-dot{width:20px;height:20px;min-width:20px;border-radius:50%;border:2px solid #DDD;transition:all .25s;position:relative}
+.option.selected .option-dot{border-color:var(--primary);background:var(--primary)}
+.option.selected .option-dot::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;border-radius:50%;background:#fff}
+
+/* ===== RESULT CARD ===== */
+.animal-card{border-radius:24px;padding:32px 24px;text-align:center;position:relative;overflow:hidden;animation:cardReveal .8s ease;margin-bottom:20px}
+.animal-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,0.3) 0%,transparent 60%)}
+.animal-card .lv-badge{display:inline-block;font-size:10px;letter-spacing:2px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,0.25);color:#fff;font-weight:700;margin-bottom:12px;position:relative}
+.animal-card .animal-emoji{font-size:80px;display:block;margin:8px 0;position:relative;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15))}
+.animal-card .animal-name{font-size:26px;font-weight:900;color:#fff;position:relative;text-shadow:0 2px 8px rgba(0,0,0,0.15);margin-bottom:4px}
+.animal-card .animal-sub{font-size:13px;color:rgba(255,255,255,0.85);position:relative;font-family:'Kiwi Maru',serif}
+.animal-card .score-big{font-size:56px;font-weight:900;color:#fff;position:relative;margin-top:12px;text-shadow:0 2px 12px rgba(0,0,0,0.2)}
+.animal-card .score-big span{font-size:18px;font-weight:500;opacity:0.7}
+
+.bio-card{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:16px;font-size:14px;line-height:1.9;color:var(--text-light);font-family:'Kiwi Maru',serif}
+.bio-card strong{color:var(--text)}
+.bio-card .bio-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;font-family:'Zen Maru Gothic',sans-serif}
+.bio-card .ecology{background:#FFF8F0;border-radius:12px;padding:14px;margin-top:12px;font-size:12px;line-height:1.8;border-left:3px solid var(--accent)}
+
+.dim-section{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.dim-section h3{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.dim-row{margin-bottom:14px}.dim-row:last-child{margin-bottom:0}
+.dim-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.dim-label span:first-child{font-weight:600}
+.dim-label span:last-child{color:var(--text-muted)}
+.dim-bar{height:8px;background:#F0E6E7;border-radius:4px;overflow:hidden}
+.dim-bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
+
+.couple-section{background:linear-gradient(135deg,#FFF0EE 0%,#FFF5EC 100%);border-radius:var(--radius);padding:24px;margin-bottom:16px;border:1px solid var(--primary-light)}
+.couple-section h3{font-size:15px;font-weight:700;margin-bottom:12px;text-align:center}
+.couple-compare{display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0}
+.couple-person{text-align:center}
+.couple-person .emoji{font-size:36px}
+.couple-person .name{font-size:12px;color:var(--text-light);margin-top:4px}
+.couple-person .score{font-size:24px;font-weight:900;color:var(--primary)}
+.couple-vs{font-size:20px;font-weight:900;color:var(--text-muted)}
+.couple-balance-bar{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--primary),#F5F5F5,var(--accent));position:relative;margin:16px 0 8px}
+.couple-balance-dot{width:20px;height:20px;border-radius:50%;background:var(--danger);border:3px solid #fff;box-shadow:var(--shadow);position:absolute;top:-4px;transition:left .8s ease}
+.couple-balance-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted)}
+.couple-analysis{background:#fff;border-radius:12px;padding:16px;margin-top:12px;font-size:13px;line-height:1.8;color:var(--text-light)}
+
+.partner-input-section{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:16px;text-align:center}
+.partner-input-section h3{font-size:15px;font-weight:700;margin-bottom:16px}
+.code-display{font-size:24px;font-weight:900;letter-spacing:4px;color:var(--primary);background:var(--primary-light);padding:12px 24px;border-radius:12px;display:inline-block;margin-bottom:16px;font-family:monospace}
+.code-input{width:100%;padding:14px;border:2px solid #F0E6E7;border-radius:12px;font-family:inherit;font-size:16px;text-align:center;letter-spacing:4px;font-weight:700;outline:none;transition:border-color .3s}
+.code-input:focus{border-color:var(--primary)}
+.code-input::placeholder{letter-spacing:1px;font-weight:400;color:#CCC}
+
+.aicha-cta{background:linear-gradient(135deg,var(--primary-dark) 0%,#C04E6A 100%);border-radius:var(--radius);padding:28px 24px;text-align:center;color:#fff;margin:24px 0;position:relative;overflow:hidden}
+.aicha-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 80%,rgba(255,255,255,0.1) 0%,transparent 50%)}
+.aicha-cta h3{font-size:18px;font-weight:900;margin-bottom:8px;position:relative}
+.aicha-cta p{font-size:13px;opacity:0.9;line-height:1.7;margin-bottom:16px;position:relative}
+.aicha-cta .btn{background:#fff;color:var(--primary-dark);font-weight:700;display:inline-block;width:auto;padding:12px 32px}
+
+.share-row{display:flex;gap:8px;margin-top:16px}
+.share-row .btn{flex:1;font-size:13px;padding:12px}
+
+.tier-list{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.tier-list h3{font-size:14px;font-weight:700;margin-bottom:12px}
+.tier-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #F5ECED;font-size:12px}
+.tier-row:last-child{border-bottom:none}
+.tier-row .t-emoji{font-size:22px;min-width:30px;text-align:center}
+.tier-row .t-name{font-weight:700;flex:1}
+.tier-row .t-range{color:var(--text-muted);font-size:11px}
+.tier-row.current{background:var(--primary-light);border-radius:8px;padding:8px 10px;margin:-2px -10px}
+
+.hidden{display:none!important}
+.footer{text-align:center;padding:32px 0;font-size:10px;color:var(--text-muted);line-height:1.8}
+.footer a{color:var(--primary);text-decoration:none}
+@media(max-width:380px){.intro-header h1{font-size:26px}.q-text{font-size:15px}.animal-card .animal-name{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="bg-hearts" id="bgHearts"></div>
+<div class="container">
+
+<!-- ===== INTRO ===== -->
+<div class="screen active" id="screen-intro">
+  <div class="intro-header">
+    <div class="brand-tag">by aicha</div>
+    <h1>溺愛度診断<span>〜あなたの「愛の重さ」、動物で診ます〜</span></h1>
+  </div>
+  <p class="intro-subtitle">愛着理論・交流分析・PCMをベースに<br>あなたの恋愛における「執着度」を<br>5次元 × 15問で科学的に分析。<br><strong>全12タイプの溺愛動物</strong>であなたの愛を診断します。</p>
+  <div class="theory-badges">
+    <span class="theory-badge">愛着理論 (Bowlby)</span>
+    <span class="theory-badge">ECR-R尺度</span>
+    <span class="theory-badge">交流分析</span>
+    <span class="theory-badge">PCMモデル</span>
+    <span class="theory-badge">共依存理論</span>
+  </div>
+  <div class="mode-cards">
+    <div class="mode-card selected" onclick="selectMode('solo')" id="mode-solo">
+      <div class="mode-emoji">💘</div>
+      <div class="mode-title">ひとりで診断する</div>
+      <div class="mode-desc">まず自分の溺愛動物を知る。15問・約3分。結果コードを相手に送れば比較もできるよ。</div>
+    </div>
+    <div class="mode-card" onclick="selectMode('couple')" id="mode-couple">
+      <div class="mode-emoji">💑</div>
+      <div class="mode-title">カップルで比較する</div>
+      <div class="mode-desc">相手の結果コードを入力して、二人の「愛の重さの天秤」を見る。</div>
+    </div>
+  </div>
+  <div id="couple-code-area" class="hidden">
+    <div class="partner-input-section">
+      <h3>相手の結果コードを入力</h3>
+      <input type="text" class="code-input" id="partnerCode" placeholder="例: A7B3C5D8E4" maxlength="10">
+      <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">相手の結果画面に表示される10桁のコード</div>
+    </div>
+  </div>
+  <button class="btn btn-primary" onclick="startQuiz()" style="margin-top:12px">診断スタート ♡</button>
+  <div class="footer">※ 本診断はエンターテイメントです。臨床的な診断ではありません。<br><a href="https://aicha-store.com" target="_blank">aicha-store.com</a></div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="screen" id="screen-quiz">
+  <div class="progress-area">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+    <div class="progress-text"><span id="progressLabel">Q1 / 15</span><span id="progressCategory"></span></div>
+  </div>
+  <div id="questionArea"></div>
+  <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled style="margin-top:16px">次へ →</button>
+</div>
+
+<!-- ===== RESULT ===== -->
+<div class="screen" id="screen-result"><div id="resultContent"></div></div>
+
+</div>
+<script>
+// ===== BG HEARTS =====
+(function(){const c=document.getElementById('bgHearts');const h=['♡','♥','❤','💕','💗'];for(let i=0;i<20;i++){const s=document.createElement('span');s.textContent=h[i%h.length];s.style.left=Math.random()*100+'%';s.style.fontSize=(12+Math.random()*18)+'px';s.style.animationDuration=(8+Math.random()*12)+'s';s.style.animationDelay=Math.random()*10+'s';c.appendChild(s)}})();
+
+let mode='solo',currentQ=0,answers=[],selectedScore=null,partnerScores=null;
+
+// ===== 12 ANIMAL TYPES =====
+const animals=[
+{min:15,max:19,lv:1,emoji:'🐈',name:'気まぐれ自由ネコ',en:'Free Cat',
+  gradient:'linear-gradient(135deg,#8E9AAF,#CBD2D0)',
+  ecology:'ネコは基本的に単独行動を好む動物。自分のペースで甘えたい時だけ寄ってきて、満足したら静かに去る。愛情表現はさりげなく、でも確かにそこにある。',
+  desc:'あなたの愛情は自立的で、相手を尊重しつつ自分の時間も大切にできるタイプ。恋人との距離感が絶妙で、「信頼しているから放っておける」強さを持っている。',
+  isTarget:false},
+{min:20,max:24,lv:2,emoji:'🦅',name:'孤高のタカ',en:'Solitary Hawk',
+  gradient:'linear-gradient(135deg,#6B705C,#A5A58D)',
+  ecology:'タカは広大な縄張りを持ち、普段は単独で空を舞う。繁殖期にだけパートナーと過ごし、見事な求愛飛行を見せる。必要な時に全力で愛を示す。',
+  desc:'普段はクールに見られがちだけど、ここぞという場面では深い愛情を見せるタイプ。恋人への信頼がベースにあるから、過度な干渉はしない。かっこいい愛し方。',
+  isTarget:false},
+{min:25,max:29,lv:3,emoji:'🐬',name:'社交的なイルカ',en:'Social Dolphin',
+  gradient:'linear-gradient(135deg,#5B9BD5,#7EC8E3)',
+  ecology:'イルカは群れで生活しつつ、個体間の適度な距離を保つ。遊び好きでコミュニケーション能力が高く、仲間との絆を大切にしながら自由に泳ぐ。',
+  desc:'恋人との時間も友達との時間も両方楽しめるバランス型。コミュ力が高く、愛情表現も自然体。「一緒にいて楽しい」と思わせる魅力がある。',
+  isTarget:false},
+{min:30,max:34,lv:4,emoji:'🐕',name:'忠実なイヌ',en:'Loyal Dog',
+  gradient:'linear-gradient(135deg,#C4956A,#E8C07C)',
+  ecology:'イヌは飼い主の帰りを玄関でじっと待つ。常に一緒にいたいという欲求がありつつも、ちゃんと待てる忍耐力を持つ。無条件の愛情の象徴。',
+  desc:'恋人が大好きで、一緒にいると尻尾を振るように嬉しくなるタイプ。素直な愛情表現が魅力で、相手の「帰る場所」になれる存在。少し寂しがり屋なところも愛おしい。',
+  isTarget:false},
+{min:35,max:39,lv:5,emoji:'🐧',name:'一途なペンギン',en:'Devoted Penguin',
+  gradient:'linear-gradient(135deg,#2C3E50,#4A6FA5)',
+  ecology:'皇帝ペンギンは数千匹のコロニーの中から、パートナーの鳴き声だけを聞き分ける。毎年同じ相手を探し出し、極寒の中で卵を温め合う。',
+  desc:'「この人」と決めたらブレない一途さが最大の武器。少しずつ「もっと一緒にいたい」という気持ちが強くなるタイプ。その真っ直ぐさ、もっと誇っていい。',
+  isTarget:true},
+{min:40,max:44,lv:6,emoji:'🐺',name:'群れを守るオオカミ',en:'Pack Wolf',
+  gradient:'linear-gradient(135deg,#4A4E69,#6B6F8A)',
+  ecology:'オオカミはつがいで生涯を共にし、群れの中で常に行動を共にする。パートナーに危険が迫れば命をかけて守り、遠吠えで絆を確認し合う。',
+  desc:'恋人を「自分の群れ」として強く守りたいタイプ。二人の世界を大切にするあまり、外の人間関係に少し嫉妬することも。その保護欲、実は相手にとって心強い。',
+  isTarget:true},
+{min:45,max:49,lv:7,emoji:'🦢',name:'永遠の愛の白鳥',en:'Eternal Swan',
+  gradient:'linear-gradient(135deg,#C9ADA7,#E8D5CF)',
+  ecology:'白鳥は生涯同じパートナーと添い遂げることで知られる。パートナーを失った白鳥は長期間鳴き続け、二度とつがいを作らない個体もいる。',
+  desc:'「永遠の愛」を本気で信じているロマンチスト。恋人との別れは人生最大の危機に感じるほど、深い愛着を持つ。その深さは美しいけど、時に自分を縛ることもある。',
+  isTarget:true},
+{min:50,max:54,lv:8,emoji:'🐙',name:'命がけ溺愛タコ',en:'Devoted Octopus',
+  gradient:'linear-gradient(135deg,#C44B6C,#E07B8B)',
+  ecology:'タコのメスは卵を産むと、孵化するまで一切食事をせず卵を守り続ける。何ヶ月も水流を送り、汚れを取り除き、孵化を見届けた後に命を終える。',
+  desc:'恋人のためなら自分を犠牲にできる、文字通り「命がけの愛」。自己犠牲が美徳だと感じるタイプ。でもね、あなた自身も大切にしていい。その愛は十分すぎるほど伝わってるから。',
+  isTarget:true},
+{min:55,max:59,lv:9,emoji:'🕷️',name:'捕獲型ジョロウグモ',en:'Web Spinner',
+  gradient:'linear-gradient(135deg,#7B2D3B,#A04050)',
+  ecology:'ジョロウグモは精巧な巣を張り、獲物を糸で包み込む。その糸は鋼鉄の5倍の強度を持ち、一度絡まれば逃れることはできない。',
+  desc:'恋人との「繋がり」を物理的に確保したいタイプ。位置情報、連絡頻度、交友関係…あらゆる糸で関係を固めたい。その執念深さは怖いほど美しい。自覚あるでしょ？',
+  isTarget:true},
+{min:60,max:64,lv:10,emoji:'🫧',name:'融合するアンコウ',en:'Fused Angler',
+  gradient:'linear-gradient(135deg,#1B2A4A,#3D5A8C)',
+  ecology:'チョウチンアンコウのオスはメスに噛みつくと、やがて血管が融合し、内臓も共有して文字通り一体化する。二度と離れることはない。究極の「離れられない」。',
+  desc:'恋人と自分の境界線が溶けかけている。相手の感情＝自分の感情。相手の不在＝自分の消失。もはや二人で一つの生命体。その融合願望は、共依存の極致であり、ある意味で究極の愛の形。',
+  isTarget:true},
+{min:65,max:70,lv:11,emoji:'🦂',name:'毒愛のサソリ',en:'Poison Scorpion',
+  gradient:'linear-gradient(135deg,#4A0E0E,#8B2020)',
+  ecology:'サソリの求愛ダンスは数時間から数日続く。オスはメスの鋏を掴み、延々と踊り続ける。交尾後、メスがオスを食べることも。愛と毒が表裏一体。',
+  desc:'愛が毒になりかけている。あるいは、もう毒だと分かっていて止められない。「好きすぎて壊したくなる」「離れられないなら相手も巻き込む」—その激しさが、あなたの愛の正体。',
+  isTarget:true},
+{min:71,max:75,lv:12,emoji:'🔥',name:'限界突破の不死鳥',en:'Immortal Phoenix',
+  gradient:'linear-gradient(135deg,#C0392B,#F39C12,#E74C3C)',
+  ecology:'不死鳥は自らの炎で燃え尽き、灰の中から何度でも蘇る。神話において「永遠の愛」と「再生」の象徴。死すらも愛を終わらせることができない。',
+  desc:'もう生物の枠を超えた。何度傷ついても、裏切られても、燃え尽きても、また愛してしまう。それは病気じゃない。もはや才能。「好きが重いって、最高じゃん。」—この言葉は、あなたのために生まれた。',
+  isTarget:true},
+];
+
+// ===== QUESTIONS (same 15) =====
+const questions=[
+{dim:'A',cat:'執着不安',text:'恋人からLINEの返信が3時間来ないとき、あなたはどうなる？',opts:[{text:'特に気にならない。自分のことをしている',score:1},{text:'少しソワソワするけど、待てる',score:2},{text:'かなり気になって、何度もスマホを見る',score:3},{text:'不安で何も手につかない。嫌われた？と考え始める',score:4},{text:'追いLINEを送るか、電話をかけてしまう',score:5}]},
+{dim:'A',cat:'執着不安',text:'恋人が異性の友達と二人で食事に行くと聞いたら？',opts:[{text:'「楽しんできてね」と素直に思える',score:1},{text:'少しモヤっとするけど、信じて送り出す',score:2},{text:'行ってほしくないと伝える',score:3},{text:'「私/僕も行く」と言う。もしくは予定を変えてもらう',score:4},{text:'その異性が誰なのか徹底的に調べる',score:5}]},
+{dim:'A',cat:'執着不安',text:'恋人が「一人の時間がほしい」と言ったら？',opts:[{text:'自然なこと。自分も一人時間は大切',score:1},{text:'少し寂しいけど尊重する',score:2},{text:'「私/僕といるのが嫌なの？」と聞いてしまう',score:3},{text:'理由が気になって仕方ない。本当に一人？',score:4},{text:'自分が何かしたのかと自責し始める',score:5}]},
+{dim:'B',cat:'承認欲求',text:'恋人に「好き」と言ってもらえる頻度について、どう思う？',opts:[{text:'態度で分かるから、言葉はそこまで重要じゃない',score:1},{text:'たまに言ってくれると嬉しい',score:2},{text:'毎日言ってほしい。言われないと不安',score:3},{text:'1日に何度も言ってほしい。言葉で確認したい',score:4},{text:'「世界で一番好き」「一生離れない」レベルの言葉が必要',score:5}]},
+{dim:'B',cat:'承認欲求',text:'SNSでの恋人との関係について：',opts:[{text:'SNSに恋愛は載せない主義',score:1},{text:'記念日くらいは載せるかも',score:2},{text:'二人の写真は定期的に投稿する',score:3},{text:'プロフや投稿で「彼氏/彼女います」アピールしたい',score:4},{text:'恋人が自分との写真を載せてくれないと怒る',score:5}]},
+{dim:'B',cat:'承認欲求',text:'恋人が自分のことを友達に自慢してくれたら：',opts:[{text:'恥ずかしいからやめてほしい',score:1},{text:'嬉しいけど、あまり見せなくていいよ',score:2},{text:'嬉しい。もっと自慢してほしい',score:3},{text:'自慢してくれないと、本当に好きなの？と思う',score:4},{text:'「俺/私の恋人、最高でしょ？」って言ってほしい',score:5}]},
+{dim:'C',cat:'感情融合',text:'恋人の感情と自分の感情の関係は：',opts:[{text:'相手は相手、自分は自分。独立している',score:1},{text:'影響は受けるが、自分の気持ちは持っている',score:2},{text:'恋人が落ち込むと自分もかなり落ち込む',score:3},{text:'恋人の機嫌が自分の一日を完全に左右する',score:4},{text:'恋人が幸せじゃないなら、自分も幸せになれない',score:5}]},
+{dim:'C',cat:'感情融合',text:'恋人と意見が違ったとき：',opts:[{text:'違いを認めつつ、お互い尊重する',score:1},{text:'話し合って落としどころを見つける',score:2},{text:'相手に合わせることが多い',score:3},{text:'相手が正しいと思い込んでしまう',score:4},{text:'自分の意見は恋人の意見と同じであるべき',score:5}]},
+{dim:'C',cat:'感情融合',text:'恋人がいない「自分」について：',opts:[{text:'恋人がいなくても自分は自分',score:1},{text:'いたほうが楽しいけど、一人でも大丈夫',score:2},{text:'恋人がいないと自分の価値が下がる気がする',score:3},{text:'恋人なしの人生は考えられない',score:4},{text:'恋人＝自分の存在意義',score:5}]},
+{dim:'D',cat:'行動束縛',text:'恋人のスマホについて：',opts:[{text:'見たいとも思わない。プライバシーは大事',score:1},{text:'見たい気持ちはあるけど、見ない',score:2},{text:'一緒にいるときは画面が気になる',score:3},{text:'パスコードは共有するのが当然だと思う',score:4},{text:'こっそり見たことがある/定期的にチェックしたい',score:5}]},
+{dim:'D',cat:'行動束縛',text:'恋人の位置情報（ゼンリー等）について：',opts:[{text:'共有する必要は全くない',score:1},{text:'安全のためなら共有してもいいかも',score:2},{text:'お互い共有するのは普通だと思う',score:3},{text:'共有してくれないと不安',score:4},{text:'常にチェックしている/したい',score:5}]},
+{dim:'D',cat:'行動束縛',text:'恋人の交友関係について：',opts:[{text:'干渉しない。自由に付き合ってほしい',score:1},{text:'基本自由だけど、誰と会うかは知りたい',score:2},{text:'異性との連絡はあまりしてほしくない',score:3},{text:'自分が把握していない人と会うのはNG',score:4},{text:'自分以外の人と遊ぶ時間を最小限にしてほしい',score:5}]},
+{dim:'E',cat:'自己犠牲',text:'恋人のために自分を犠牲にすることについて：',opts:[{text:'自分を大切にしたうえで、相手も大切にする',score:1},{text:'たまには我慢もするけど、バランスは取る',score:2},{text:'相手が喜ぶなら、自分の予定はいつでも変える',score:3},{text:'恋人のためなら友達付き合いも犠牲にできる',score:4},{text:'恋人のためなら何でもできる。自分なんて後でいい',score:5}]},
+{dim:'E',cat:'自己犠牲',text:'恋人に理不尽に怒られたとき：',opts:[{text:'理不尽なら「それは違う」と伝える',score:1},{text:'ちゃんと話し合おうとする',score:2},{text:'自分が悪かったのかな…と考える',score:3},{text:'とにかく謝る。怒らせた自分が悪い',score:4},{text:'嫌われたくないから何でも受け入れる',score:5}]},
+{dim:'E',cat:'自己犠牲',text:'恋人から「別れたい」と言われたら：',opts:[{text:'悲しいけど、お互いのために受け入れる',score:1},{text:'理由を聞いて、改善できるか話し合う',score:2},{text:'「何でもするから別れないで」と言う',score:3},{text:'相手が変わるまで説得し続ける',score:4},{text:'自分なしでは生きていけないと感じる。世界が終わる',score:5}]},
+];
+
+const dimNames={A:'執着不安',B:'承認欲求',C:'感情融合',D:'行動束縛',E:'自己犠牲'};
+const dimColors={A:'#E74C6F',B:'#E8A87C',C:'#D4736C',D:'#C4A265',E:'#9B6B8A'};
+const dimDescs={A:'別離不安。愛着理論における「不安型愛着」の中核。',B:'承認・言語的愛情の要求度。PCMの「感情型」。',C:'自他境界の曖昧さ。交流分析の「共生関係」。',D:'相手の行動を把握・制限したい度合い。',E:'自己犠牲で関係を維持する傾向。共依存の核心。'};
+
+function selectMode(m){mode=m;document.getElementById('mode-solo').classList.toggle('selected',m==='solo');document.getElementById('mode-couple').classList.toggle('selected',m==='couple');document.getElementById('couple-code-area').classList.toggle('hidden',m!=='couple')}
+
+function startQuiz(){
+  if(mode==='couple'){const code=document.getElementById('partnerCode').value.trim();if(code.length===10){partnerScores=decodeResult(code);if(!partnerScores){alert('コードが正しくありません。');return}}else if(code.length>0){alert('10桁のコードを入力してください。');return}}
+  currentQ=0;answers=[];showScreen('screen-quiz');renderQuestion();
+}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+
+function renderQuestion(){
+  const q=questions[currentQ];const pct=(currentQ/questions.length*100).toFixed(0);
+  document.getElementById('progressBar').style.width=pct+'%';
+  document.getElementById('progressLabel').textContent=`Q${currentQ+1} / ${questions.length}`;
+  document.getElementById('progressCategory').textContent=q.cat;
+  let h=`<div class="q-card" key="${currentQ}"><div class="q-category">${q.cat}</div><div class="q-number">Question ${currentQ+1}</div><div class="q-text">${q.text}</div><div class="options">`;
+  q.opts.forEach((o,i)=>{h+=`<div class="option" onclick="selectOption(${i},${o.score})"><div class="option-dot"></div><div>${o.text}</div></div>`});
+  h+=`</div></div>`;document.getElementById('questionArea').innerHTML=h;document.getElementById('nextBtn').disabled=true;
+}
+function selectOption(idx,score){selectedScore=score;document.querySelectorAll('.option').forEach((o,i)=>o.classList.toggle('selected',i===idx));document.getElementById('nextBtn').disabled=false}
+function nextQuestion(){if(selectedScore===null)return;answers.push({dim:questions[currentQ].dim,score:selectedScore});selectedScore=null;currentQ++;if(currentQ>=questions.length){document.getElementById('progressBar').style.width='100%';showResult()}else{renderQuestion()}}
+
+function calcScores(){const dims={A:0,B:0,C:0,D:0,E:0};answers.forEach(a=>dims[a.dim]+=a.score);const total=Object.values(dims).reduce((s,v)=>s+v,0);return{dims,total}}
+function encodeResult(dims){const e=v=>Math.round((v-3)/12*9);return'A'+e(dims.A)+'B'+e(dims.B)+'C'+e(dims.C)+'D'+e(dims.D)+'E'+e(dims.E)}
+function decodeResult(code){const m=code.match(/^A(\d)B(\d)C(\d)D(\d)E(\d)$/);if(!m)return null;const d=v=>Math.round(parseInt(v)/9*12+3);return{dims:{A:d(m[1]),B:d(m[2]),C:d(m[3]),D:d(m[4]),E:d(m[5])},total:d(m[1])+d(m[2])+d(m[3])+d(m[4])+d(m[5])}}
+
+function getAnimal(total){return animals.find(a=>total>=a.min&&total<=a.max)||animals[animals.length-1]}
+
+function showResult(){
+  const scores=calcScores();const code=encodeResult(scores.dims);const a=getAnimal(scores.total);const pct=Math.round((scores.total-15)/60*100);
+  let h='';
+
+  // Animal Card
+  h+=`<div class="animal-card" style="background:${a.gradient};animation:cardReveal .8s ease">`;
+  h+=`<div class="lv-badge">Lv.${a.lv} / 12</div>`;
+  h+=`<div class="animal-emoji">${a.emoji}</div>`;
+  h+=`<div class="animal-name">${a.name}</div>`;
+  h+=`<div class="animal-sub">${a.en}</div>`;
+  h+=`<div class="score-big">${scores.total}<span> / 75</span></div>`;
+  h+=`</div>`;
+
+  // Description
+  h+=`<div class="bio-card">`;
+  h+=`<div class="bio-title">💬 あなたの溺愛スタイル</div>`;
+  h+=`${a.desc}`;
+  h+=`<div class="ecology">🔬 <strong>この動物の生態：</strong><br>${a.ecology}</div>`;
+  h+=`</div>`;
+
+  // 5-Dimension bars
+  h+=`<div class="dim-section"><h3>📊 5次元分析</h3>`;
+  Object.keys(dimNames).forEach(d=>{
+    const val=scores.dims[d];const dimPct=Math.round((val-3)/12*100);
+    h+=`<div class="dim-row"><div class="dim-label"><span>${dimNames[d]}</span><span>${val} / 15</span></div>`;
+    h+=`<div class="dim-bar"><div class="dim-bar-fill" style="width:${dimPct}%;background:${dimColors[d]}"></div></div></div>`;
+  });
+  h+=`<div style="margin-top:14px;font-size:11px;color:var(--text-muted);line-height:1.7">`;
+  Object.keys(dimDescs).forEach(d=>{h+=`<div style="margin-bottom:3px"><strong style="color:${dimColors[d]}">${dimNames[d]}：</strong>${dimDescs[d]}</div>`});
+  h+=`</div></div>`;
+
+  // Tier List
+  h+=`<div class="tier-list"><h3>🏆 全12タイプ一覧</h3>`;
+  animals.forEach(t=>{
+    const isCurrent=t.lv===a.lv;
+    h+=`<div class="tier-row${isCurrent?' current':''}">`;
+    h+=`<div class="t-emoji">${t.emoji}</div>`;
+    h+=`<div class="t-name">${isCurrent?'▶ ':''}${t.name}</div>`;
+    h+=`<div class="t-range">${t.min}〜${t.max}</div>`;
+    h+=`</div>`;
+  });
+  h+=`</div>`;
+
+  // Couple
+  if(partnerScores){
+    const my=scores.total,their=partnerScores.total,balance=my/(my+their)*100,diff=my-their;
+    const pa=getAnimal(their);
+    let analysis='';
+    if(Math.abs(diff)<=5)analysis=`二人とも同じくらいの溺愛度！「${a.name}」と「${pa.name}」のお似合いカップル。息ぴったりの溺愛コンビ。`;
+    else if(diff>5)analysis=`あなた(${a.name})の方が${diff}ポイント重い！愛が先行している分、時に不安を感じることも。相手にも甘えてもらう空間を作ると天秤が安定するかも。`;
+    else analysis=`相手(${pa.name})の方が${Math.abs(diff)}ポイント重い！実はあなたが愛される側。その愛、ちゃんと受け止めてあげてね。`;
+
+    h+=`<div class="couple-section"><h3>💑 カップル愛の天秤</h3>`;
+    h+=`<div class="couple-compare">`;
+    h+=`<div class="couple-person"><div class="emoji">${a.emoji}</div><div class="name">あなた</div><div class="score">${my}</div></div>`;
+    h+=`<div class="couple-vs">⚖️</div>`;
+    h+=`<div class="couple-person"><div class="emoji">${pa.emoji}</div><div class="name">相手</div><div class="score">${their}</div></div>`;
+    h+=`</div>`;
+    h+=`<div class="couple-balance-bar"><div class="couple-balance-dot" style="left:calc(${balance}% - 10px)"></div></div>`;
+    h+=`<div class="couple-balance-labels"><span>相手が重い</span><span>均衡</span><span>あなたが重い</span></div>`;
+    h+=`<div class="couple-analysis">${analysis}</div>`;
+
+    h+=`<div style="margin-top:16px">`;
+    Object.keys(dimNames).forEach(d=>{
+      const myV=scores.dims[d],thV=partnerScores.dims[d],myP=(myV-3)/12*100,thP=(thV-3)/12*100;
+      h+=`<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">${dimNames[d]}</div>`;
+      h+=`<div style="display:flex;gap:4px;align-items:center">`;
+      h+=`<div style="flex:1;height:6px;background:#F0E6E7;border-radius:3px;overflow:hidden"><div style="height:100%;width:${myP}%;background:${dimColors[d]};border-radius:3px"></div></div>`;
+      h+=`<div style="font-size:10px;color:var(--text-muted);min-width:40px;text-align:center">${myV}:${thV}</div>`;
+      h+=`<div style="flex:1;height:6px;background:#F0E6E7;border-radius:3px;overflow:hidden;direction:rtl"><div style="height:100%;width:${thP}%;background:${dimColors[d]};opacity:0.5;border-radius:3px"></div></div>`;
+      h+=`</div></div>`;
+    });
+    h+=`</div></div>`;
+  }
+
+  // Share Code
+  h+=`<div class="partner-input-section"><h3>🔗 相手に送るコード</h3>`;
+  h+=`<div class="code-display">${code}</div>`;
+  h+=`<div style="font-size:12px;color:var(--text-light);line-height:1.7">このコードを恋人に送って<br>「カップルで比較する」モードで入力してもらおう！</div></div>`;
+
+  // CTA (target only)
+  if(a.isTarget){
+    h+=`<div class="aicha-cta">`;
+    h+=`<h3>好きが重いって、最高じゃん。</h3>`;
+    h+=`<p>その溢れる愛を、カタチにしよう。<br>aicha のペアルック T シャツで<br>「一緒に着ようよ！」って言ってみない？</p>`;
+    h+=`<a href="https://aicha.official.ec/items/136344979" target="_blank" rel="noopener" class="btn">aicha SHOP を見る →</a>`;
+    h+=`</div>`;
+  }
+
+  // Share / Retry
+  h+=`<div class="share-row">`;
+  h+=`<button class="btn btn-secondary" onclick="shareResult()">結果をシェア</button>`;
+  h+=`<button class="btn btn-secondary" onclick="retry()">もう一度やる</button>`;
+  h+=`</div>`;
+
+  h+=`<div class="footer"><strong>参考理論</strong><br>Bowlby (1969) 愛着理論 / Brennan et al. (1998) ECR尺度<br>Bartholomew & Horowitz (1991) 4カテゴリモデル<br>Berne (1961) 交流分析 / Kahler (1982) PCM<br>Beattie (1987) 共依存理論<br><br><a href="https://aicha-store.com" target="_blank">aicha-store.com</a></div>`;
+
+  document.getElementById('resultContent').innerHTML=h;showScreen('screen-result');
+}
+
+function shareResult(){
+  const scores=calcScores();const a=getAnimal(scores.total);const code=encodeResult(scores.dims);
+  const text=`【溺愛度診断 by aicha】\n\n${a.emoji} ${a.name}\nLv.${a.lv} / 12\nスコア: ${scores.total} / 75\n\n結果コード: ${code}\n（相手に送ってカップル比較しよう！）\n\n「好きが重いって、最高じゃん。」\n▶ https://aicha-store.com\n\n#aicha溺愛診断 #溺愛度 #メンヘラチェッカー`;
+  if(navigator.share){navigator.share({title:'溺愛度診断 by aicha',text}).catch(()=>{})}
+  else{navigator.clipboard.writeText(text).then(()=>alert('結果をコピーしました！SNSに貼ってね♡'))}
+}
+function retry(){mode='solo';partnerScores=null;showScreen('screen-intro');selectMode('solo')}
+</script>
+</body>
+</html>
