@@ -394,6 +394,101 @@ a { color: inherit; text-decoration: none; }
   .hero-copy { font-size: 1.6rem; }
   .manifesto { font-size: 0.95rem; }
 }
+
+/* ===== 溺愛度診断バナー ===== */
+.shindan-banner {
+  padding: 80px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #FFF8F0 0%, #FFF0EE 50%, #FFF8F0 100%);
+}
+.shindan-banner::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(212,115,108,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.shindan-inner {
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+}
+.shindan-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #BDA5A7;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.shindan-title {
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #D4736C, #E74C6F);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.shindan-desc {
+  font-size: 14px;
+  color: #8B7072;
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+.shindan-animals {
+  font-size: 28px;
+  letter-spacing: 4px;
+  margin: 20px 0;
+  animation: shindan-float 3s ease-in-out infinite;
+}
+@keyframes shindan-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.shindan-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.shindan-badge {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(212,115,108,0.1);
+  color: #B85A54;
+  font-weight: 500;
+}
+.shindan-btn {
+  display: inline-block;
+  padding: 16px 48px;
+  background: linear-gradient(135deg, #D4736C, #E74C6F);
+  color: #fff;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(212,115,108,0.3);
+  transition: all 0.3s;
+  font-family: 'Zen Maru Gothic', sans-serif;
+}
+.shindan-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(212,115,108,0.4);
+}
+.shindan-note {
+  font-size: 11px;
+  color: #BDA5A7;
+  margin-top: 16px;
+}
 </style>
 </head>
 <body>
@@ -510,6 +605,29 @@ a { color: inherit; text-decoration: none; }
         <p>ふたりで並ぶとひとつの意味になる。離れていても繋がっている、を形に。</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- 溺愛度診断バナー -->
+<section class="shindan-banner fade-in">
+  <div class="shindan-inner">
+    <div class="shindan-label">diagnostic</div>
+    <h2 class="shindan-title">
+      あなたの愛の重さ、<br>動物で診ます。
+    </h2>
+    <div class="shindan-animals">🐈 🐬 🐧 🦢 🐙 🔥</div>
+    <p class="shindan-desc">
+      愛着理論 × 交流分析 × PCM をベースにした<br>
+      15問の質問で、あなたの「溺愛タイプ」を<br>
+      全12種類の動物から診断。
+    </p>
+    <div class="shindan-badge-row">
+      <span class="shindan-badge">15問・約3分</span>
+      <span class="shindan-badge">全12タイプ</span>
+      <span class="shindan-badge">カップル比較OK</span>
+    </div>
+    <a href="/shindan" class="shindan-btn">溺愛度を診断する ♡</a>
+    <p class="shindan-note">※ 彼氏にもやらせて、二人の結果を比較してみてね</p>
   </div>
 </section>
 
