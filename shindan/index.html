@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>溺愛度診断 by aicha</title>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=Kiwi+Maru:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <style>
 :root {
   --bg: #FFF8F0;
@@ -53,7 +54,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:var(--bg);color:var(--t
 .mode-title{font-size:16px;font-weight:700;margin-bottom:4px}
 .mode-desc{font-size:12px;color:var(--text-light);line-height:1.6}
 
-.btn{display:block;width:100%;padding:16px;border:none;border-radius:14px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;text-align:center}
+.btn{display:block;width:100%;padding:16px;border:none;border-radius:14px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;text-align:center;text-decoration:none}
 .btn-primary{background:linear-gradient(135deg,var(--primary) 0%,var(--danger) 100%);color:#fff;box-shadow:0 4px 16px rgba(212,115,108,0.3)}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(212,115,108,0.4)}
 .btn-primary:disabled{opacity:0.4;cursor:not-allowed;transform:none}
@@ -84,6 +85,14 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:var(--bg);color:var(--t
 .animal-card .animal-sub{font-size:13px;color:rgba(255,255,255,0.85);position:relative;font-family:'Kiwi Maru',serif}
 .animal-card .score-big{font-size:56px;font-weight:900;color:#fff;position:relative;margin-top:12px;text-shadow:0 2px 12px rgba(0,0,0,0.2)}
 .animal-card .score-big span{font-size:18px;font-weight:500;opacity:0.7}
+
+/* ===== v2: MAIN COPY AREA ===== */
+.main-copy-area{text-align:center;margin-bottom:20px;padding:20px 16px}
+.main-copy-text{font-size:22px;font-weight:900;line-height:1.5;color:var(--text);min-height:1.5em}
+.sub-copy-text{font-size:13px;color:var(--text-light);margin-top:8px;opacity:0;transition:opacity .6s ease;font-family:'Kiwi Maru',serif;font-style:italic}
+.sub-copy-text.visible{opacity:1}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.animal-bounce{animation:bounce .6s ease .3s}
 
 .bio-card{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:16px;font-size:14px;line-height:1.9;color:var(--text-light);font-family:'Kiwi Maru',serif}
 .bio-card strong{color:var(--text)}
@@ -119,11 +128,84 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:var(--bg);color:var(--t
 .code-input:focus{border-color:var(--primary)}
 .code-input::placeholder{letter-spacing:1px;font-weight:400;color:#CCC}
 
+/* ===== v2: CTA STYLES ===== */
 .aicha-cta{background:linear-gradient(135deg,var(--primary-dark) 0%,#C04E6A 100%);border-radius:var(--radius);padding:28px 24px;text-align:center;color:#fff;margin:24px 0;position:relative;overflow:hidden}
 .aicha-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 80%,rgba(255,255,255,0.1) 0%,transparent 50%)}
 .aicha-cta h3{font-size:18px;font-weight:900;margin-bottom:8px;position:relative}
 .aicha-cta p{font-size:13px;opacity:0.9;line-height:1.7;margin-bottom:16px;position:relative}
 .aicha-cta .btn{background:#fff;color:var(--primary-dark);font-weight:700;display:inline-block;width:auto;padding:12px 32px}
+
+/* v2: Awakening CTA Dark+Gold */
+.awakening-cta{background:linear-gradient(135deg,#1a1a2e 0%,#2d1b3d 100%)!important;border:1px solid rgba(212,175,55,0.3)}
+.awakening-cta::before{background:radial-gradient(circle at 20% 80%,rgba(212,175,55,0.1) 0%,transparent 50%)}
+.awakening-cta h3{color:#d4af37}
+.awakening-cta .btn{background:linear-gradient(135deg,#d4af37,#f0d060);color:#1a1a2e}
+.awakening-cta .btn:hover{box-shadow:0 0 24px rgba(212,175,55,0.5)}
+@keyframes ctaPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+.awakening-cta .btn:active{animation:ctaPulse .3s ease}
+
+/* v2: Teaser for Lv.1-4 */
+.teaser-cta{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin:24px 0;text-align:center;border:2px dashed var(--text-muted)}
+.teaser-lock{font-size:32px;margin-bottom:8px}
+.teaser-text{font-size:13px;color:var(--text-muted);line-height:1.7;font-family:'Kiwi Maru',serif}
+
+/* ===== v2: AWAKENING ANIMATION ===== */
+@keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-3px)}20%,40%,60%,80%{transform:translateX(3px)}}
+.screen-shake{animation:shake .3s ease}
+@keyframes unlockSpin{0%{transform:rotate(0deg) scale(1);opacity:1}50%{transform:rotate(180deg) scale(1.2)}100%{transform:rotate(360deg) scale(1);opacity:1}}
+.awakening-section{text-align:center;margin:24px 0;opacity:0;transition:opacity .8s ease}
+.awakening-section.visible{opacity:1}
+.awakening-lock{font-size:48px;display:inline-block}
+.awakening-lock.unlocked{animation:unlockSpin .8s ease}
+.awakening-text{font-size:16px;font-weight:900;color:var(--danger);margin-top:12px;opacity:0;transition:opacity .6s ease .3s}
+.awakening-text.visible{opacity:1}
+
+/* v2: Heart Particles */
+.particle-container{position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden}
+.heart-particle{position:absolute;bottom:-20px;font-size:16px;opacity:0;animation:particleFloat linear forwards}
+@keyframes particleFloat{0%{opacity:0;transform:translateY(0) rotate(0deg) scale(0.5)}10%{opacity:0.8}80%{opacity:0.6}100%{opacity:0;transform:translateY(-100vh) rotate(720deg) scale(1.2)}}
+
+/* v2: Background gradient shift */
+.bg-awakened{transition:background 1.5s ease}
+.bg-awakened.active{background:linear-gradient(180deg,#FFF8F0 0%,#2d1b3d 50%,#1a1a2e 100%)}
+
+/* ===== v2: COUPLE COMPATIBILITY CARD ===== */
+.compat-card{background:linear-gradient(135deg,#1a1a2e 0%,#2d1b3d 50%,#1a1a2e 100%);border-radius:24px;padding:32px 20px;margin:20px 0;color:#fff;position:relative;overflow:hidden}
+.compat-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(212,175,55,0.1) 0%,transparent 60%)}
+.compat-header{text-align:center;position:relative;margin-bottom:24px}
+.compat-header .compat-label{font-size:11px;letter-spacing:3px;color:#d4af37;text-transform:uppercase;margin-bottom:16px}
+.compat-animals{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:16px}
+.compat-animals .compat-animal{text-align:center}
+.compat-animals .compat-animal .compat-emoji{font-size:48px;display:block}
+.compat-animals .compat-animal .compat-type{font-size:11px;color:rgba(255,255,255,0.7);margin-top:4px}
+.compat-heart{font-size:28px}
+.compat-score-area{text-align:center;margin-bottom:20px}
+.compat-score-num{font-size:64px;font-weight:900;background:linear-gradient(135deg,#d4af37,#f0d060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.compat-score-num span{font-size:24px}
+.compat-score-bar{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;margin:12px 0;overflow:hidden}
+.compat-score-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#d4af37,#f0d060);transition:width 1.5s ease}
+
+.compat-section{background:rgba(255,255,255,0.05);border-radius:16px;padding:20px;margin-bottom:12px;border:1px solid rgba(255,255,255,0.08)}
+.compat-section-title{font-size:13px;font-weight:700;color:#d4af37;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.compat-section-body{font-size:13px;line-height:1.8;color:rgba(255,255,255,0.85);font-family:'Kiwi Maru',serif}
+
+.compat-quote{text-align:center;margin:20px 0;padding:20px;border-top:1px solid rgba(212,175,55,0.2);border-bottom:1px solid rgba(212,175,55,0.2)}
+.compat-quote-icon{font-size:20px;color:#d4af37;margin-bottom:8px}
+.compat-quote-text{font-size:14px;line-height:1.8;color:rgba(255,255,255,0.9);font-family:'Kiwi Maru',serif;font-style:italic}
+.compat-quote-attr{font-size:11px;color:#d4af37;margin-top:8px;letter-spacing:2px}
+
+.compat-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.compat-actions .btn{font-size:14px;padding:14px}
+.btn-gold{background:linear-gradient(135deg,#d4af37,#f0d060);color:#1a1a2e;border:none;font-weight:700}
+.btn-gold:hover{box-shadow:0 0 20px rgba(212,175,55,0.4)}
+.btn-outline-light{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3)}
+
+/* v2: SNS Share Buttons */
+.sns-share-row{display:flex;gap:8px;margin-top:16px}
+.sns-share-row .btn{flex:1;font-size:12px;padding:12px 8px;display:flex;align-items:center;justify-content:center;gap:4px}
+.btn-twitter{background:#1DA1F2;color:#fff;border:none}
+.btn-line{background:#06C755;color:#fff;border:none}
+.btn-instagram{background:linear-gradient(135deg,#833AB4,#FD1D1D,#F77737);color:#fff;border:none}
 
 .share-row{display:flex;gap:8px;margin-top:16px}
 .share-row .btn{flex:1;font-size:13px;padding:12px}
@@ -143,11 +225,104 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:var(--bg);color:var(--t
 .back-top{display:block;text-align:center;padding:12px 0 0;font-size:12px;letter-spacing:1px}
 .back-top a{color:var(--text-muted);text-decoration:none;transition:color .3s}
 .back-top a:hover{color:var(--primary)}
-@media(max-width:380px){.intro-header h1{font-size:26px}.q-text{font-size:15px}.animal-card .animal-name{font-size:22px}}
+@media(max-width:380px){.intro-header h1{font-size:26px}.q-text{font-size:15px}.animal-card .animal-name{font-size:22px}.main-copy-text{font-size:18px}}
+
+/* ===== v3: COMPAT LOADING ===== */
+.compat-v3{position:relative;margin:20px 0}
+.compat-loading{background:#0a0a1a;border-radius:24px;padding:60px 20px;text-align:center;position:relative;overflow:hidden;min-height:200px}
+.compat-loading-particles{position:relative;height:60px;margin-bottom:24px}
+.compat-particle-left,.compat-particle-right{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle,#fff,#d4af37);box-shadow:0 0 20px rgba(212,175,55,0.6);transform:translateY(-50%)}
+.compat-particle-left{left:10%;animation:particleConvergeL 2s ease-in-out forwards}
+.compat-particle-right{right:10%;animation:particleConvergeR 2s ease-in-out forwards}
+@keyframes particleConvergeL{0%{left:10%;opacity:0.3}80%{left:48%;opacity:1}100%{left:50%;opacity:0}}
+@keyframes particleConvergeR{0%{right:10%;opacity:0.3}80%{right:48%;opacity:1}100%{right:50%;opacity:0}}
+.compat-loading-flash{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0.8),transparent 60%);opacity:0;animation:compatFlash 0.6s ease 1.8s forwards}
+@keyframes compatFlash{0%{opacity:0;transform:scale(0.5)}50%{opacity:1;transform:scale(1.2)}100%{opacity:0;transform:scale(2)}}
+.compat-loading-text{font-size:14px;color:rgba(255,255,255,0.7);font-family:'Kiwi Maru',serif;min-height:1.5em}
+
+/* ===== v3: COMPAT GROUP REVEAL ===== */
+.compat-group-reveal{text-align:center;padding:40px 20px;border-radius:24px;position:relative;overflow:hidden;transition:background 1s ease}
+.compat-group-name{font-size:36px;font-weight:900;opacity:0;transform:scale(0.5);transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1)}
+.compat-group-name.revealed{opacity:1;transform:scale(1)}
+@media(min-width:380px){.compat-group-name{font-size:42px}}
+
+/* ===== v3: COMPAT DUAL TYPE ===== */
+.compat-dual-type{display:flex;align-items:center;justify-content:center;gap:16px;padding:24px 12px;text-align:center}
+.compat-type-left,.compat-type-right{opacity:0;flex:1}
+.compat-type-left{transform:translateX(-60px)}
+.compat-type-right{transform:translateX(60px)}
+.compat-type-left.slid-in,.compat-type-right.slid-in{opacity:1;transform:translateX(0);transition:all 0.8s cubic-bezier(0.34,1.56,0.64,1)}
+.compat-type-emoji{font-size:56px;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.2))}
+.compat-type-info{font-size:12px;color:rgba(255,255,255,0.8);margin-top:8px;font-weight:700}
+.compat-heart-center{font-size:32px;animation:heartPulse 1.5s ease infinite;flex-shrink:0}
+@keyframes heartPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+
+/* ===== v3: COMPAT SECTION CARDS ===== */
+.compat-reveal{opacity:0;transform:translateY(30px);transition:opacity 0.6s ease,transform 0.6s ease}
+.compat-reveal.compat-visible{opacity:1;transform:translateY(0)}
+
+.compat-seek-card{background:#F5D5DB;border-radius:16px;padding:24px 20px;margin:16px 0;border-left:4px solid #D4586A;position:relative}
+.compat-seek-card .card-icon{position:absolute;top:16px;left:16px;font-size:20px}
+.compat-seek-card .card-title{font-size:15px;font-weight:700;color:#B03050;margin-bottom:4px;padding-left:28px}
+.compat-seek-card .card-subtitle{font-size:12px;color:#D4586A;font-style:italic;margin-bottom:12px;padding-left:28px;font-family:'Kiwi Maru',serif}
+.compat-seek-card .card-body{font-size:14px;line-height:1.9;color:#3D2C2E;font-family:'Kiwi Maru',serif}
+.compat-seek-card.compat-visible{animation:slideFromLeft 0.5s ease-out forwards}
+@keyframes slideFromLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+
+.compat-hold-card{background:linear-gradient(180deg,#fff 0%,#FFF0EE 100%);border-radius:16px;padding:24px 20px;margin:16px 0;border:1px solid #F2D0CD;position:relative}
+.compat-hold-card .card-icon{position:absolute;top:16px;left:16px;font-size:20px}
+.compat-hold-card .card-title{font-size:15px;font-weight:700;color:#D4736C;margin-bottom:4px;padding-left:28px}
+.compat-hold-card .card-subtitle{font-size:12px;color:#D4736C;font-weight:700;margin-bottom:12px;padding-left:28px}
+.compat-hold-card .card-body{font-size:14px;line-height:1.9;color:#3D2C2E;font-family:'Kiwi Maru',serif}
+.compat-hold-card .highlight{background:rgba(196,162,101,0.2);padding:2px 4px;border-radius:3px}
+
+.compat-episode-card{background:#1A1A2E;border-radius:16px;padding:28px 20px;margin:16px 0;position:relative;overflow:hidden}
+.compat-episode-card .card-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:4px;text-align:center}
+.compat-episode-card .card-subtitle{font-size:12px;color:#d4af37;font-weight:700;margin-bottom:16px;text-align:center}
+.compat-episode-card .card-body{font-size:14px;line-height:2.0;color:rgba(255,255,255,0.85);font-family:'Kiwi Maru',serif;text-align:center;max-width:480px;margin:0 auto}
+.compat-episode-card .episode-paragraph{opacity:0;transition:opacity 0.5s ease}
+.compat-episode-card .episode-paragraph.ep-visible{opacity:1}
+.compat-episode-star{position:absolute;color:#d4af37;opacity:0.15;font-size:10px;animation:starFloat 6s ease-in-out infinite}
+@keyframes starFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-15px) rotate(180deg)}}
+
+.compat-quote-card{background:#FFF5DC;border:3px solid #C9963A;border-radius:16px;padding:28px 24px;margin:16px 0;text-align:center;position:relative}
+.compat-quote-card .quote-gem{font-size:24px;margin-bottom:12px}
+.compat-quote-card .quote-title{font-size:12px;color:#C9963A;letter-spacing:2px;margin-bottom:12px;font-weight:700}
+.compat-quote-card .quote-text{font-size:16px;font-weight:700;font-style:italic;line-height:1.9;color:#8B6914;font-family:'Kiwi Maru',serif;min-height:2em}
+.compat-quote-card .quote-attr{font-size:11px;color:#C9963A;margin-top:12px;letter-spacing:2px}
+@keyframes quotePulse{0%,100%{box-shadow:0 0 0 rgba(201,150,58,0)}50%{box-shadow:0 0 20px rgba(201,150,58,0.3)}}
+.compat-quote-card.quote-pulsed{animation:quotePulse 1.5s ease}
+
+.compat-share-cta{background:linear-gradient(135deg,#D4586A 0%,#B03050 100%);border-radius:16px;padding:28px 20px;margin:16px 0;text-align:center;color:#fff}
+.compat-share-cta .cta-main-text{font-size:16px;font-weight:700;margin-bottom:16px}
+.compat-share-cta .cta-sub{font-size:12px;opacity:0.9;margin-bottom:16px;line-height:1.7}
+.compat-share-cta .btn{margin-bottom:8px}
+.compat-share-cta.compat-visible{animation:slideUpCta 0.5s ease-out forwards}
+@keyframes slideUpCta{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ctaGlow{0%,100%{box-shadow:0 0 10px rgba(212,115,108,0.3)}50%{box-shadow:0 0 30px rgba(212,115,108,0.6)}}
+.cta-glow{animation:ctaGlow 2s ease infinite}
+
+/* ===== v3: STICKY COMPARE BANNER ===== */
+#stickyCompareBanner{position:fixed;top:0;left:0;right:0;height:56px;background:linear-gradient(90deg,#D4586A,#B03050);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:#fff;transform:translateY(-100%);transition:transform 0.4s ease;box-shadow:0 2px 12px rgba(0,0,0,0.15)}
+#stickyCompareBanner.sticky-visible{transform:translateY(0)}
+#stickyCompareBanner .sticky-text{font-size:13px;font-weight:700;flex:1}
+#stickyCompareBanner .sticky-btn{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.5);color:#fff;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+#stickyCompareBanner .sticky-expanded{display:none;position:absolute;top:56px;left:0;right:0;background:#B03050;padding:12px 16px;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+#stickyCompareBanner .sticky-expanded.open{display:flex;align-items:center;gap:8px}
+#stickyCompareBanner .sticky-code{font-family:monospace;font-size:18px;letter-spacing:3px;font-weight:900;background:rgba(255,255,255,0.15);padding:6px 12px;border-radius:8px;flex:1;text-align:center}
+#stickyCompareBanner .sticky-copy-btn{background:#fff;color:#B03050;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
 </style>
 </head>
 <body>
 <div class="bg-hearts" id="bgHearts"></div>
+<div id="stickyCompareBanner">
+  <span class="sticky-text">あなたの恋人は何タイプ？</span>
+  <button class="sticky-btn" onclick="toggleStickyExpand()">比較する →</button>
+  <div class="sticky-expanded" id="stickyExpanded">
+    <span class="sticky-code" id="stickyCode"></span>
+    <button class="sticky-copy-btn" onclick="copyStickyCode()">コピー</button>
+  </div>
+</div>
 <div class="container">
 
 <div class="back-top"><a href="/">← aicha トップへ戻る</a></div>
@@ -209,67 +384,199 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:var(--bg);color:var(--t
 
 let mode='solo',currentQ=0,answers=[],selectedScore=null,partnerScores=null;
 
-// ===== 12 ANIMAL TYPES =====
+// ===== 12 ANIMAL TYPES (v2) =====
 const animals=[
-{min:15,max:19,lv:1,emoji:'🐈',name:'気まぐれ自由ネコ',en:'Free Cat',
+{min:15,max:19,lv:1,emoji:'🐈',name:'LINE未読無視の常習犯ネコ',en:'Free Cat',
   gradient:'linear-gradient(135deg,#8E9AAF,#CBD2D0)',
   ecology:'ネコは基本的に単独行動を好む動物。自分のペースで甘えたい時だけ寄ってきて、満足したら静かに去る。愛情表現はさりげなく、でも確かにそこにある。',
-  desc:'あなたの愛情は自立的で、相手を尊重しつつ自分の時間も大切にできるタイプ。恋人との距離感が絶妙で、「信頼しているから放っておける」強さを持っている。',
+  mainCopy:'愛してるよ（※私の気が向いた時だけ）',
+  subCopy:'気まぐれな砂漠のオアシス',
+  desc:'相手の愛情はたっぷり欲しいけど、自分のペースは絶対に崩さないドライな気質。すり寄ってきたかと思えば、撫でようとした瞬間にどこかへ消える。あなたのその気まぐれな態度のせいで、恋人は「理不尽な砂漠」で愛のオアシスを求めて彷徨っています。少しは相手の重い愛を受け止めてあげて？',
+  shareText:'溺愛診断Lv1の【未読無視の常習犯ネコ】🐈 愛が軽すぎて逆にどうしたらいいか教えて😇 誰か私を沼らせてみて？ #aicha溺愛診断',
+  ctaText:null,
+  attrs:{執着度:2,独占欲:2,自己犠牲度:2,表現力:2,自立度:10},
+  coupleTexts:{
+    seek:'あなたがパートナーに求めているのは「無条件の受容」です。気まぐれに連絡して、気まぐれに甘えて、気まぐれに一人になる──このすべてを「それがあなただよね」と笑って受け入れてくれる相手。ネコの愛はランダム報酬。だからこそ、来た時の破壊力が半端じゃない。気をつけてほしいのは、あなたの「気まぐれ」がパートナーの「不安」を増幅させるリスクがあること。あなたにとっては「自分のペース」でも、相手にとっては「いつ愛されるかわからない不安」です。大事なのは、「気まぐれ」の中に一つだけ「確実なもの」を入れること。たとえば毎晩のおやすみLINE。たった一つの習慣が、あなたの気まぐれを「個性」から「魅力」に変えます。',
+    hold:'あなたが言えていないこと──「実は寂しい」という本音です。「連絡しなくても平気」「一人でも大丈夫」と思っているあなたですが、パートナーからの連絡が来た瞬間にほっとするその感覚、知っていますよね。その「ほっとする」の正体は、寂しさです。もっとわがままでいい。「今日暇？声聞きたい」「なんか会いたくなった」──こういう言葉を、気の向いた時に言うだけでいい。毎日じゃなくていい。でも言った時のパートナーの「え、本当に？！」という喜びの顔を、一度見てみてください。あなたの「たまに」は、パートナーにとって「無限に待った甲斐があった」瞬間になります。',
+    episode:'ネコ型の「そこかよ」エピソード──3日間一人の時間を満喫していたあなたが、4日目の夜中に突然「今どこにいる？」とLINEを送り、「え、家にいるけど？」の返信に「会いに行ってもいい？」とぶっこんだ話。深夜に突然来た彼氏に「なんで来たの」と言いながら明らかに嬉しそうにしていたのがバレていた件。または誕生日前日の夜11時に「今日って誕生日覚えてる？」と送り、「明日だよね？」の返信に「そうだよ（念押し完了）」と終わらせた謎の確認作業。周りは「つかみどころがない」と言うけど、パートナーは「あいつの気まぐれが来る瞬間を、ずっと待ってるんだよな」と笑って言う。あなたの「たまに」が、パートナーの全てです。',
+    quote:'自由であることと、愛することは矛盾しない。あなたが気の向いた時に差し出す手が、誰かの世界を変えている。'
+  },
   isTarget:false},
-{min:20,max:24,lv:2,emoji:'🦅',name:'孤高のタカ',en:'Solitary Hawk',
+{min:20,max:24,lv:2,emoji:'🦅',name:'パーソナルスペース死守タカ',en:'Solitary Hawk',
   gradient:'linear-gradient(135deg,#6B705C,#A5A58D)',
   ecology:'タカは広大な縄張りを持ち、普段は単独で空を舞う。繁殖期にだけパートナーと過ごし、見事な求愛飛行を見せる。必要な時に全力で愛を示す。',
-  desc:'普段はクールに見られがちだけど、ここぞという場面では深い愛情を見せるタイプ。恋人への信頼がベースにあるから、過度な干渉はしない。かっこいい愛し方。',
+  mainCopy:'連絡頻度＝愛情の重さじゃないから（真顔）',
+  subCopy:'愛はある。ただし自分の時間が最優先',
+  desc:'広い空を単独で舞うタカのように、自分の時間と空間を何よりも愛する孤高の存在。恋人がいても「週1会えれば十分」「LINEは1日1往復でOK」という圧倒的ドライさ。でも、いざ会った時の愛情表現のギャップで相手を沼らせる無自覚な罪深さを持っています。',
+  shareText:'溺愛診断Lv2の【パーソナルスペース死守タカ】🦅 LINEは1日1往復で十分だと思ってるんだけど、これって冷たいの？ #aicha溺愛診断',
+  ctaText:null,
+  attrs:{執着度:3,独占欲:2,自己犠牲度:3,表現力:3,自立度:10},
+  coupleTexts:{
+    seek:'あなたがパートナーに求めているのは「自立した状態での愛情」です。べったりする関係は息苦しい。でも「好き」という気持ちは本物。タカは高い空から地上を見下ろす。あなたの愛も、少し距離を置いた場所から相手を大切に思うタイプです。気をつけてほしいのは、あなたの「距離感」がパートナーにとって「冷たさ」に映ることがあること。あなたにとって「連絡しない＝信頼している」ですが、相手にとっては「連絡がない＝自分に興味がない」と感じるかもしれません。愛情の言語が違うだけで、愛がないわけじゃない。でもそれを言葉にしないと伝わらない。「連絡は少ないけど、いつもあなたのことを考えている」──この一言を定期的に送るだけで、パートナーの不安は消えます。',
+    hold:'あなたが遠慮していること──「依存してもいいですか」という問いです。独立心の高いあなたは、誰かに頼ることへの抵抗感があります。「自分でできる」「迷惑かけたくない」と思って、しんどいときも一人で抱えてしまう。でも聞いてください。パートナーはあなたに「頼ってほしい」と思っています。強いあなたが「ちょっと疲れた、話聞いて」と言った瞬間、パートナーは「ようやく俺が役に立てる」と思って嬉しくなる。あなたの「自立」は美しい。でも「甘えられる自立」は最強です。今日一つだけ、助けてもらってみてください。',
+    episode:'タカ型の「え、そんなこと？」エピソード──3日間LINEを返さなかったところ「え、生きてる？」という安否確認が来た話。あなた的には「返す内容思いついてなかっただけ」なのに相手が「嫌われた？」と本気でメンタルブレイクしていた件。または、誕生日プレゼントに「何でもいい」と言ったら本当に何でもいいと思われて「え、こんなん？」となったけど、その後「ごめん、本当はこれが欲しかった」と素直に言えたことで関係が深まった話。「わかってくれると思ってた」より「言ったら伝わった」の積み重ねが、最終的に最強のカップルを作ります。',
+    quote:'高く飛ぶことは、離れることじゃない。大切なものを、もっと広く見渡すためだ。'
+  },
   isTarget:false},
-{min:25,max:29,lv:3,emoji:'🐬',name:'社交的なイルカ',en:'Social Dolphin',
+{min:25,max:29,lv:3,emoji:'🐬',name:'全方位モテの罪深きイルカ',en:'Social Dolphin',
   gradient:'linear-gradient(135deg,#5B9BD5,#7EC8E3)',
   ecology:'イルカは群れで生活しつつ、個体間の適度な距離を保つ。遊び好きでコミュニケーション能力が高く、仲間との絆を大切にしながら自由に泳ぐ。',
-  desc:'恋人との時間も友達との時間も両方楽しめるバランス型。コミュ力が高く、愛情表現も自然体。「一緒にいて楽しい」と思わせる魅力がある。',
+  mainCopy:'みんな好き。でも一番はキミだよ？（※ガチ）',
+  subCopy:'誰にでも優しい罪深き生き物',
+  desc:'群れで楽しく遊ぶイルカのように、コミュ力が高く誰とでも仲良くなれるバランス型。あなたのその絶妙な距離感と「誰にでも優しい」態度は、重い愛を持つ恋人を常に不安のどん底に突き落としています。無自覚な全方位モテが、相手のメンヘラを誘発しているかも？',
+  shareText:'溺愛診断Lv3の【罪深きイルカ】🐬 誰にでも優しくしてるだけなのに束縛されるの何で？そんなに罪深い？ #aicha溺愛診断',
+  ctaText:null,
+  attrs:{執着度:4,独占欲:3,自己犠牲度:5,表現力:8,自立度:7},
+  coupleTexts:{
+    seek:'あなたが恋人に求めているのは「楽しい時間と深い理解の両立」です。コミュ力高く誰とでも仲良くなれるあなたは、恋愛でも「一緒にいて楽しい」ことを最重視します。退屈な関係は続かないし、笑いがない日は何かが欠けている感覚になる。一方で、表面的な楽しさだけでなく「本当のことを話せる」深さも求めています。気をつけてほしいのは、「楽しい空気を壊したくない」という気持ちから、ネガティブな感情を押し込めてしまうこと。不満が突然爆発する──これがイルカ型の典型的なパターンです。楽しさの中にも、ちゃんと不満や不安を話せる関係を作ることが大切です。',
+    hold:'あなたが遠慮していること──「一番でいたい」という欲求です。全方位モテのあなたは、それを自覚しているからこそ「独占欲を出すのはかっこ悪い」と思っている。でも本当は、パートナーに「お前が一番大切」と言ってほしいし、他の誰かと比べられるのは嫌。もっとわがままでいい。「あの子のことどう思ってんの？」と聞いていい。「私のことが一番好きって言って」とせがんでいい。あなたの「独占欲」は弱さじゃなくて愛の証拠です。コミュ力高い人ほど、実は内側で「自分だけを見てほしい」と思っている。その本音、パートナーに言ってみてください。',
+    episode:'イルカ型のやばいシーン──飲み会で誰よりも場を盛り上げていたあなたが、帰り道で突然「今日、他の子たちのこと楽しそうに見てたよね」とさらっと言い始めた件。「え？そういうこと気にしてたの？」と彼氏に驚かれ「別に気にしてないし」と言いながら若干ふくれっ面の攻防。または、友達の多いあなたが彼氏の前で「一番仲良い男友達」の話をした時の彼氏の微妙な表情を見逃さず、「ねえ今嫉妬した？」とニヤニヤした話。周りは「あの子はモテるから」と言うけど、あなたの心の中では常に「この人だけは絶対離さない」という静かな炎が燃えている。',
+    quote:'誰とでも笑えることは才能。でも一人だけに泣けることが、本当の愛だ。'
+  },
   isTarget:false},
-{min:30,max:34,lv:4,emoji:'🐕',name:'忠実なイヌ',en:'Loyal Dog',
+{min:30,max:34,lv:4,emoji:'🐕',name:'お座り待機中の健気イヌ',en:'Loyal Dog',
   gradient:'linear-gradient(135deg,#C4956A,#E8C07C)',
   ecology:'イヌは飼い主の帰りを玄関でじっと待つ。常に一緒にいたいという欲求がありつつも、ちゃんと待てる忍耐力を持つ。無条件の愛情の象徴。',
-  desc:'恋人が大好きで、一緒にいると尻尾を振るように嬉しくなるタイプ。素直な愛情表現が魅力で、相手の「帰る場所」になれる存在。少し寂しがり屋なところも愛おしい。',
+  mainCopy:'ずっと待ってる。でも「待て」って言われたら我慢する（涙）',
+  subCopy:'尻尾は振りたい、でも我慢してる',
+  desc:'飼い主の帰りを玄関で待ち続けるイヌのように、本音は24時間一緒にいたい健気な尽くし型。でも「重いと思われたくない」という理性がブレーキをかけて、一生懸命尻尾を振るのを我慢しています。スマホの通知音が鳴るたびに即レス待機しているあなたの愛、もう隠しきれていませんよ。',
+  shareText:'溺愛診断Lv4の【健気イヌ】🐕 重いと思われたくなくて愛を我慢してるの、私だけ？本当はもっと構ってほしいのに... #aicha溺愛診断',
+  ctaText:null,
+  attrs:{執着度:7,独占欲:5,自己犠牲度:6,表現力:4,自立度:4},
+  coupleTexts:{
+    seek:'あなたがパートナーに求めているのは「褒めてもらうこと」と「一緒にいる時間」です。シンプルだけど、これがあなたの全て。「好き」と言われたい、「ありがとう」と言われたい、頭を撫でてもらいたい（比喩じゃなく本気で）。イヌ型の愛は純粋で、駆け引きがない。それが最大の魅力であり、最大の弱点でもある。気をつけてほしいのは、相手の「今日は一人にして」を「嫌われた」と解釈してしまうこと。あなたにとって「一緒にいない＝愛がない」ですが、相手にとっては「一人の時間＝充電」です。「待て」と言われた時、尻尾を振りながら待てるかどうか。それがイヌ型の愛を最強にする鍵です。',
+    hold:'あなたが遠慮していること──「もっと構ってほしい」という切実な願いです。でも「しつこいかな」「ウザいかな」と思って、連絡を控えたり、「忙しいなら大丈夫だよ」と引いてしまう。本当は「暇？」じゃなくて「会いたい！今すぐ！」と叫びたいのに。もっとわがままでいい。あなたの純粋な「会いたい」は重荷じゃなくて、パートナーにとっての元気の源です。今日、「忙しいなら大丈夫」じゃなくて「忙しくても5分だけ声聞かせて」と言ってみてください。',
+    episode:'イヌ型のやばいエピソード──彼氏からのLINEへの返信を「早すぎると思われるかな」と3分我慢してから送ったのに、結局30秒で送っちゃった話。または「今日会える？」の一言を5回書いて4回消して、結局「暇？」と送った話（本当は暇じゃなかった）。周りからは「もっと余裕持ちなよ」と言われるけど、パートナーは「あいつが連絡くれるたびに元気になる」と友達に話している。あなたの純粋な愛は、パートナーの毎日に光を灯しています。それは決して「重い」じゃなくて「温かい」んです。',
+    quote:'愛とは、待つことを苦にしない感情。あなたのその忠実さが、誰かの人生を温めている。'
+  },
   isTarget:false},
-{min:35,max:39,lv:5,emoji:'🐧',name:'一途なペンギン',en:'Devoted Penguin',
+{min:35,max:39,lv:5,emoji:'🐧',name:'GPS監視希望のペンギン',en:'Devoted Penguin',
   gradient:'linear-gradient(135deg,#2C3E50,#4A6FA5)',
   ecology:'皇帝ペンギンは数千匹のコロニーの中から、パートナーの鳴き声だけを聞き分ける。毎年同じ相手を探し出し、極寒の中で卵を温め合う。',
-  desc:'「この人」と決めたらブレない一途さが最大の武器。少しずつ「もっと一緒にいたい」という気持ちが強くなるタイプ。その真っ直ぐさ、もっと誇っていい。',
+  mainCopy:'数千人の中からでも、絶対あなたを見つけ出すから',
+  subCopy:'一途すぎて、もはや執着',
+  desc:'毎年同じ相手を狂気的な精度で見つけ出すペンギンのように、一度愛した相手への執着心はピカイチ。「この人しかいない」と思い込んだら、相手の些細な変化やSNSのいいね欄まで監視網を張り巡らせます。一途すぎるがゆえの特大の愛、そろそろ形にして相手に刻み込みませんか？',
+  shareText:'溺愛診断Lv5の【GPS監視希望のペンギン】🐧 好きな人のSNSのいいね欄チェックするのって一途の範囲内だよね...？ #aicha溺愛診断',
+  ctaText:'一途な愛、"お揃い"で証明しない？',
+  attrs:{執着度:8,独占欲:7,自己犠牲度:5,表現力:5,自立度:4},
+  coupleTexts:{
+    seek:'あなたがパートナーに求めているのは「同じ熱量の一途さ」です。ペンギンは数千羽の中から自分のパートナーを鳴き声だけで見分ける。あなたにもその能力がある。問題は、相手にも同じ能力を求めてしまうこと。「私があなたを見つけたように、あなたも私だけを見つけてほしい」──この願望は美しいけれど、相手の愛し方があなたと同じとは限りません。気をつけてほしいのは、「一途さの証明」を相手に要求し続けること。好きだからこそ「本当に私だけ？」と何度も確認してしまう。でも信頼は確認の回数ではなく、確認しなくても大丈夫と思える瞬間の積み重ねで育ちます。あなたの一途さは宝石です。その宝石を「見て」と差し出し続けるのではなく、ただ静かに光らせていてください。',
+    hold:'あなたが遠慮していること──「もっと特別扱いしてほしい」という欲求です。一途なあなたは、パートナーにとっても「唯一の存在」でいたい。でも「特別扱いして」と言うのは「自信がない」みたいで恥ずかしい。だから記念日をさりげなく匂わせたり、「今日何の日か知ってる？」と遠回しに確認したりする。もっとストレートでいい。「今日は特別な日だから、二人でお祝いしたい」「私だけの特別な呼び方つけて」──これを言っていい。あなたが「特別」を求めることは、わがままじゃなくて愛の確認作業です。パートナーはきっと喜んでその期待に応えてくれます。',
+    episode:'ペンギン型のやばいシーン──人混みの中で彼氏がはぐれた時、パニックになりかけたあなたが彼氏の「くしゃみの音」だけで居場所を特定した話（本当に？）。または付き合って3年経っても、彼氏が他の女性と話しているのを見ると胸がザワつく件。「3年で慣れるでしょ」と友達に言われるけど「慣れてたまるか」と内心で叫んでいる。彼氏の方は「3年経ってもこんなに好きでいてくれるの、すごくない？」と友達に自慢している。あなたの一途さは、年月で薄まるものじゃない。それが本物の愛の証拠です。',
+    quote:'千の群衆の中で、あなたの声だけが聞こえる。それは運命じゃない、私がずっと聴いていたからだ。'
+  },
   isTarget:true},
-{min:40,max:44,lv:6,emoji:'🐺',name:'群れを守るオオカミ',en:'Pack Wolf',
+{min:40,max:44,lv:6,emoji:'🐺',name:'テリトリー絶対防衛オオカミ',en:'Pack Wolf',
   gradient:'linear-gradient(135deg,#4A4E69,#6B6F8A)',
   ecology:'オオカミはつがいで生涯を共にし、群れの中で常に行動を共にする。パートナーに危険が迫れば命をかけて守り、遠吠えで絆を確認し合う。',
-  desc:'恋人を「自分の群れ」として強く守りたいタイプ。二人の世界を大切にするあまり、外の人間関係に少し嫉妬することも。その保護欲、実は相手にとって心強い。',
+  mainCopy:'私の恋人に近づく奴は、全員敵だから',
+  subCopy:'独占欲という名の最強の盾',
+  desc:'つがいで生涯を共にし、群れを命がけで守るオオカミ気質。恋人の異性の影や浮気の可能性に対する嗅覚はFBI並み。「私たち」の領域を侵す者には容赦なく牙を剥きます。その圧倒的な独占欲と防衛本能は、選ばれた相手にとっては最高にして最恐の愛情です。',
+  shareText:'溺愛診断Lv6の【テリトリー絶対防衛オオカミ】🐺 恋人に近づく異性に殺意湧くの普通だよね？ね？？ #aicha溺愛診断',
+  ctaText:'テリトリーを"マーキング"しない？',
+  attrs:{執着度:7,独占欲:10,自己犠牲度:6,表現力:7,自立度:5},
+  coupleTexts:{
+    seek:'あなたがパートナーに求めているのは「私だけの味方でいること」です。群れのリーダーとしてパートナーを守り、外敵から縄張りを防衛する──それがオオカミの愛です。「他の異性と二人きりにならないで」「連絡先交換しないで」──これはワガママではなく「縄張りの防衛」です。気をつけてほしいのは、防衛本能が暴走して「パートナーの社会生活」まで制限してしまうこと。仕事上の付き合いや古い友人関係まで「脅威」と認定してしまうと、パートナーは「守られている」ではなく「閉じ込められている」と感じます。大事なのは「俺のもの」ではなく「俺が守る」というスタンス。所有欲を保護欲に変換するだけで、あなたの縄張り意識は最強の安心感に変わります。',
+    hold:'あなたが言えていないこと──「怖い」という気持ちです。強気なオオカミ型の奥には、「いつか離れていくんじゃないか」という静かな恐怖が隠れています。だから誰よりも強く縄張りを主張するし、誰よりも恋人を守ろうとする。でもその恐怖、パートナーに言えていますか？「あなたがいなくなったら怖い」「ずっとそばにいてほしい」──これを言った瞬間、あなたのイメージがガラリと変わります。強さの中の弱さを知ったパートナーは、あなたをもっと深く愛します。あなたの「守りたい」という強さと「怖い」という弱さ──その両方を持つ人間が、一番深く愛せる人間です。',
+    episode:'オオカミ型のやばいエピソード──彼氏の携帯に見知らぬ女性からLINEが来ていることに気づいた瞬間、5秒の沈黙ののちに「誰？」という一言。その声のトーンと目つきに彼氏が「同僚です、仕事の連絡です、本当に」と即座に履歴を開示した事案。または、彼女が他の男と話しているのを遠くから見ていたら、気づいた彼女が「大丈夫、好きなのはあなただけだから」と先に言いに来た話（なんで気づくんだ）。周りには「独占欲強すぎ」と言われるけど、パートナーは「あれだけ俺のこと考えてくれる人、他にいないよ」と言う。これが愛です。',
+    quote:'群れを守るのは、強さじゃない。「この群れを失いたくない」という、静かな覚悟だ。'
+  },
   isTarget:true},
-{min:45,max:49,lv:7,emoji:'🦢',name:'永遠の愛の白鳥',en:'Eternal Swan',
+{min:45,max:49,lv:7,emoji:'🦢',name:'愛の重さで沈みそうな白鳥',en:'Eternal Swan',
   gradient:'linear-gradient(135deg,#C9ADA7,#E8D5CF)',
   ecology:'白鳥は生涯同じパートナーと添い遂げることで知られる。パートナーを失った白鳥は長期間鳴き続け、二度とつがいを作らない個体もいる。',
-  desc:'「永遠の愛」を本気で信じているロマンチスト。恋人との別れは人生最大の危機に感じるほど、深い愛着を持つ。その深さは美しいけど、時に自分を縛ることもある。',
+  mainCopy:'あなたがいなくなったら、息の仕方も忘れる',
+  subCopy:'優雅に見えて、水面下は修羅場',
+  desc:'生涯同じ相手と添い遂げ、相手を失うと鳴き続ける白鳥のように、ロマンチックかつ重すぎる愛の持ち主。水面の上では優雅なカップルを装いながら、水面下では「嫌われないかな」「浮気してないかな」と必死に足をバタバタ。その狂おしいほどの愛、最高です。',
+  shareText:'溺愛診断Lv7の【沈みそうな白鳥】🦢 優雅に見えて水面下で愛が重すぎて溺れてるの私だけ？www #aicha溺愛診断',
+  ctaText:'その隠れた重い愛、"暗号"にしない？',
+  attrs:{執着度:8,独占欲:7,自己犠牲度:7,表現力:9,自立度:4},
+  coupleTexts:{
+    seek:'あなたがパートナーに求めているのは「私の水面下を見てくれること」です。外からは「落ち着いていて素敵なカップル」に見えるあなたたち。でもあなたの心の中では、常に不安との戦いが行われています。「このままでいいのかな」「もっと愛されたいけど言えない」「返信が遅い、何かあった？」──これを表情に出さず、笑顔で「大丈夫」と言い続けるあなた。気をつけてほしいのは、相手はあなたの「本当の水面下」を知りたいと思っているということ。「優雅に見える」からといって、苦しんでいないとは思っていない。でも言ってくれないと助けられない。水面下で必死に足を動かしていることを、たまには見せてあげてください。それが二人の本当の信頼を作ります。',
+    hold:'あなたが飲み込んでいること──「もっと私を見て」という叫びです。白鳥のように美しく振る舞うあなたは、感情的になることへの恥や恐れを持っています。「泣いたら引かれる」「怒ったら器が小さく見える」と思って、ずっと静かにしている。でも聞いてください。パートナーはあなたの「完璧な佇まい」ではなく「あなた自身」が好きです。泣いていいし、怒っていいし、「もっと構ってよ」とごねていい。あなたが感情を見せた瞬間、パートナーは「この人の全部を守りたい」と思います。優雅さは武器ですが、素のあなたは最強の武器です。今夜、一回だけ水面下を見せてみてください。',
+    episode:'白鳥型カップルのやばいシーン──合コンで誰よりも笑顔で楽しそうにしていたあなたが、帰り道に突然「今日、あの子と楽しそうに話してたね」と静かに言い始めた話。声は穏やかなのに目が笑っていなかったため、彼氏が「やばいパターンだ」と即理解して謝罪した件。または誕生日に「何もしなくていいよ」と言っておきながら、内心では「何かしてくれるよね？」と思っていたら、サプライズがあって秒で泣き崩れた話。周りは「何考えてるかわからない」と言うけど、パートナーだけは「あの子の水面下、全部わかる気がするんだよな」と言う。それが本物の愛というものです。',
+    quote:'湖面が静かなのは、嵐がないからじゃない。深いところで、全てを受け止めているからだ。'
+  },
   isTarget:true},
-{min:50,max:54,lv:8,emoji:'🐙',name:'命がけ溺愛タコ',en:'Devoted Octopus',
+{min:50,max:54,lv:8,emoji:'🐙',name:'自己犠牲MAXの貢ぎタコ',en:'Devoted Octopus',
   gradient:'linear-gradient(135deg,#C44B6C,#E07B8B)',
   ecology:'タコのメスは卵を産むと、孵化するまで一切食事をせず卵を守り続ける。何ヶ月も水流を送り、汚れを取り除き、孵化を見届けた後に命を終える。',
-  desc:'恋人のためなら自分を犠牲にできる、文字通り「命がけの愛」。自己犠牲が美徳だと感じるタイプ。でもね、あなた自身も大切にしていい。その愛は十分すぎるほど伝わってるから。',
+  mainCopy:'私の時間もお金も全部あげる。だから私だけを見て',
+  subCopy:'命を削って愛を証明する究極の尽くし型',
+  desc:'卵を守るため一切の食事を絶ち命を捧げるタコのように、愛する人のためなら自己犠牲を全く厭わない。恋人のスケジュールが最優先で自分の予定は全キャンセル。尽くしすぎて都合のいい存在になりかけるスレスレのラインを攻める、愛の重さ重量級プレイヤーです。',
+  shareText:'溺愛診断Lv8の【貢ぎタコ】🐙 恋人のために予定全キャンセルって普通だよね？え、違うの？ #aicha溺愛診断',
+  ctaText:'その尽くす愛、相手に"宣言"しない？',
+  attrs:{執着度:8,独占欲:6,自己犠牲度:10,表現力:6,自立度:2},
+  coupleTexts:{
+    seek:'あなたがパートナーに求めているのは「私の尽くしを受け取ってくれること」です。尽くすことがあなたの愛の言語であり、存在意義でもある。料理を作る、サプライズを仕込む、体調が悪ければ全てを投げ出して駆けつける──これらは義務ではなく衝動です。気をつけてほしいのは、「尽くすこと」が「見返りの期待」に変わる瞬間です。タコは脳を8本の腕に分散している。あなたの愛も8方向に分散して相手を包み込みますが、その8本の腕が「こんなにしてるのに」という恨みの触手に変わった瞬間、関係は窒息します。大事なのは「やってあげた」ではなく「やりたかったからやった」というスタンス。見返りが返ってこない日も「私が好きでやっている」と言えるかどうか。それがタコの愛を最強にする鍵です。',
+    hold:'あなたが遠慮していること──「たまには私にもしてほしい」という本音です。いつも相手のために動いているあなたは、自分がしてもらう側になることに慣れていません。「誕生日何がほしい？」と聞かれても「何でもいいよ」と答えてしまう。本当は具体的に欲しいものがあるのに。もっとわがままでいい。「サプライズしてほしい」「手料理食べたい」「今日は私の番」──これを言っていい。尽くすことが得意なあなたが「してもらう」ことを許可した瞬間、パートナーは「ようやく俺もこの人に何かできる」と喜びます。あなたの自己犠牲は美しい。でも「受け取る勇気」を持つことが、愛を循環させる最後のピースです。',
+    episode:'タコ型の「やばい」エピソードといえば──彼氏が「ちょっと喉痛い」とつぶやいた翌朝、枕元に市販薬・はちみつレモン・おかゆ・タオル・加湿器（新品）が揃っていた件。または彼氏の仕事のプレゼン前夜に「応援してるよ」の一言だけ言いに車で1時間かけて会いに行き、5分で帰った話。「そこまでしなくていい」と言われるたびに「したいからしてる」と答えるあなた。周りは「疲れない？」と心配するけど、パートナーは「この人に尽くされることが、俺の人生の誇りだ」と思っている。世界中でたった一人の、あなたの愛を全部受け取れる人がいる──それが奇跡です。',
+    quote:'愛するとは動詞である。あなたは毎日その動詞を、最高の形で活用し続けている。'
+  },
   isTarget:true},
-{min:55,max:59,lv:9,emoji:'🕷️',name:'捕獲型ジョロウグモ',en:'Web Spinner',
+{min:55,max:59,lv:9,emoji:'🕷️',name:'絶対逃がさない監禁ジョロウグモ',en:'Web Spinner',
   gradient:'linear-gradient(135deg,#7B2D3B,#A04050)',
   ecology:'ジョロウグモは精巧な巣を張り、獲物を糸で包み込む。その糸は鋼鉄の5倍の強度を持ち、一度絡まれば逃れることはできない。',
-  desc:'恋人との「繋がり」を物理的に確保したいタイプ。位置情報、連絡頻度、交友関係…あらゆる糸で関係を固めたい。その執念深さは怖いほど美しい。自覚あるでしょ？',
+  mainCopy:'どこ行くの？ 私の巣からは一生出られないよ？',
+  subCopy:'愛という名の最強の拘束具',
+  desc:'獲物を糸で包み込むジョロウグモのように、物理的にも精神的にも相手を包み込み、絶対に逃がさない束縛のプロ。スマホのパスワード共有、位置情報の交換は当たり前。愛という名の美しい糸で相手を雁字搦めにし「私なしでは生きられない体」に改造していく、恐ろしいほどの愛情の持ち主です。',
+  shareText:'溺愛診断Lv9の【監禁ジョロウグモ】🕷️ スマホのパスワード共有は愛の基本だよね？違うの？🕸️ #aicha溺愛診断',
+  ctaText:'逃がさない覚悟、"着る"？',
+  attrs:{執着度:9,独占欲:10,自己犠牲度:7,表現力:8,自立度:3},
+  coupleTexts:{
+    seek:'あなたがパートナーに求めているのは「完全なる可視化」です。今どこにいて、誰といて、何をしていて、何時に帰るのか。これらの情報がリアルタイムで共有されていないと、あなたの頭の中で「最悪のシナリオ」が自動再生されます。気をつけてほしいのは、この「管理欲求」の正体が「不安」であること。あなたは相手を縛りたいのではなく、「失いたくない」のです。その恐怖があまりにも大きいから、巣を張って逃げられないようにする。でもパートナーは逃げようとしていません。あなたの巣の中にいることを選んでいます。今日から「報告して」を「教えてくれると嬉しい」に変えてみてください。命令を依頼に変えるだけで、巣は「監獄」から「安全基地」に変わります。',
+    hold:'あなたが言えずにいること──「私なしでも楽しいの？」という問いです。パートナーが友人と楽しそうにしている姿を見ると、喜ぶべきなのに胸がチクリとする。「私がいなくても楽しめるなら、私って必要なの？」──この問いを口にすると「面倒くさい女」と思われる気がして、笑顔で「楽しんできてね」と送り出す。でもその夜、スマホの画面をぼんやり見つめている自分がいる。もっとわがままでいい。「私も連れてって」「私といる時が一番楽しいって言って」──これを言っていい。あなたの独占欲は愛の証です。それを隠すのは、愛を隠すのと同じ。',
+    episode:'ジョロウグモ型のやばいエピソード──パートナーのスマホのパスコードを「セキュリティのため」という名目で共有させた話。または彼氏が「今日飲み会」と言った瞬間、「何時から何時まで？場所は？メンバーは？女性は？」と5W1Hを完璧に押さえたジャーナリスト顔負けの取材が始まった件。帰りが予定より15分遅れただけで「もしかして事故？」と心配LINEが3通、電話2回、最後にGoogleマップで居場所を特定しようとしていた話。彼氏は「ここまで心配してくれる人いないよ」と笑う。あなたの巣は、世界で一番安全で、一番温かい場所です。',
+    quote:'糸を紡ぐのは、つかまえるためじゃない。離れていても、繋がっていたいからだ。'
+  },
   isTarget:true},
-{min:60,max:64,lv:10,emoji:'🫧',name:'融合するアンコウ',en:'Fused Angler',
+{min:60,max:64,lv:10,emoji:'🫧',name:'細胞レベルの共依存アンコウ',en:'Fused Angler',
   gradient:'linear-gradient(135deg,#1B2A4A,#3D5A8C)',
   ecology:'チョウチンアンコウのオスはメスに噛みつくと、やがて血管が融合し、内臓も共有して文字通り一体化する。二度と離れることはない。究極の「離れられない」。',
-  desc:'恋人と自分の境界線が溶けかけている。相手の感情＝自分の感情。相手の不在＝自分の消失。もはや二人で一つの生命体。その融合願望は、共依存の極致であり、ある意味で究極の愛の形。',
+  mainCopy:'あなたと私、物理的にひとつになりたいの',
+  subCopy:'究極の「離れられない」',
+  desc:'オスがメスの体に噛みつき血管まで融合するチョウチンアンコウのように、恋人と24時間繋がっていないと息ができない究極の共依存体質。「今何してるの？」「誰といるの？」は挨拶代わり。GPS常時接続は基本的人権です。あなたの愛は深海よりも深く、そして重い。',
+  shareText:'診断したら【細胞レベルの共依存アンコウ】🫧 彼氏と血管レベルで融合したいのって普通だよね？？？ #aicha溺愛診断',
+  ctaText:'細胞レベルの繋がり、"見える化"しない？',
+  attrs:{執着度:10,独占欲:8,自己犠牲度:9,表現力:7,自立度:1},
+  coupleTexts:{
+    seek:'あなたがパートナーに求めているのは「物理的な存在の証明」です。LINEでの愛情表現だけでは足りない。「隣にいる」「手が触れている」「同じ空気を吸っている」──この物理的な接続があなたの精神安定剤です。離れている時間は「不在」ではなく「喪失」として体験されます。気をつけてほしいのは、この「一体化願望」が相手の個人空間を侵食するリスクがあること。あなたにとって「ずっと一緒にいたい」は愛の表現ですが、相手にとって「一人の時間」は充電時間です。大事なのは「離れている＝愛がない」ではなく「離れていても繋がっている」という信頼を育てること。今日から一つだけ試してみて。離れている時に「今何してる？」ではなく「今日のあなたも好きだよ」と送ってみてください。確認ではなく、肯定。それだけで関係の空気が変わります。',
+    hold:'あなたが遠慮していること──「もっと一緒にいたい」という本音の本音です。すでに十分一緒にいるのに、まだ足りないと思っている自分が怖い。「こんなに一緒にいたがるの、おかしいかな」と自問して、答えが出ないまま「今日は一人でいいよ」と言ってしまう。でもそれ、本心じゃないですよね。もっとわがままでいい。「今日も会いたい」「明日も会いたい」「毎日会いたい」──これを全部言っていい。あなたの共依存は、病気じゃなくて体質です。そしてその体質を「最高じゃん」と笑ってくれるパートナーが、あなたの隣にいる。遠慮するのは、その人への信頼が足りないということ。全力で甘えてみてください。',
+    episode:'あなたたちカップルの「やばさ」は伝説級です。たとえば──トイレに行く時も「ドア開けといて」と言ったことがある件。または寝ている時に無意識で相手の腕を掴んでいて、彼氏がトイレに起きようとしたら「行かないで」と寝言で引き止めた話。友人との旅行を断った理由が「3日も離れたら細胞が死ぬ」だった件。周りは「共依存じゃん」と心配するけど、二人の中では「これが私たちの普通」。アンコウのオスがメスの体に融合するように、あなたたちの愛はもはや生物学的。「重い」んじゃなくて「深い」んです。海の底で光る提灯のように、あなたたちの愛は暗闇の中でこそ輝く。',
+    quote:'二つの波が出会って一つになる瞬間、それぞれの波は消えない──より大きな波になるだけだ。'
+  },
   isTarget:true},
-{min:65,max:70,lv:11,emoji:'🦂',name:'毒愛のサソリ',en:'Poison Scorpion',
+{min:65,max:70,lv:11,emoji:'🦂',name:'心中上等の猛毒サソリ',en:'Poison Scorpion',
   gradient:'linear-gradient(135deg,#4A0E0E,#8B2020)',
   ecology:'サソリの求愛ダンスは数時間から数日続く。オスはメスの鋏を掴み、延々と踊り続ける。交尾後、メスがオスを食べることも。愛と毒が表裏一体。',
-  desc:'愛が毒になりかけている。あるいは、もう毒だと分かっていて止められない。「好きすぎて壊したくなる」「離れられないなら相手も巻き込む」—その激しさが、あなたの愛の正体。',
+  mainCopy:'愛してる。もし裏切ったら......わかるよね？',
+  subCopy:'愛と憎しみの振り幅、劇薬レベル',
+  desc:'相手を鋏で掴んで離さないサソリのように、愛と憎しみが表裏一体の超危険人物。愛している時は命を懸けて守る最強のパートナーですが、裏切った瞬間の毒の猛威は計り知れません。「一緒に幸せになるか、一緒に地獄に落ちるか」の二択しか存在しない、スリル満点の激重愛です。',
+  shareText:'溺愛診断Lv11の【猛毒サソリ】🦂 愛と憎しみが紙一重すぎて自分でも怖いんだけど、同じ人いる？ #aicha溺愛診断',
+  ctaText:'この猛毒の愛、"証明"してみない？',
+  attrs:{執着度:10,独占欲:10,自己犠牲度:8,表現力:9,自立度:3},
+  coupleTexts:{
+    seek:'あなたがパートナーに求めているのは「絶対的な誠実さ」です。嘘をつかれること、隠し事をされること、曖昧な態度を取られること──これらはサソリにとって致命的な毒です。あなたの愛には条件がある。それは「裏切らないこと」。この条件さえ満たされれば、サソリの愛は誰よりも深く、誰よりも熱い。でも気をつけてほしいのは、「誠実さ」のハードルを相手にとって超えられない高さに設定していないかということ。友達との飲み会に行くだけで「本当に友達だけ？」と疑ってしまう自分に気づいたら、それは愛ではなく恐怖です。あなたの毒は防衛本能。でも信頼という解毒剤を手に入れれば、その毒は「誰よりも深く愛せる力」に変わります。パートナーの言葉をまず信じてみる。その5秒の勇気が、関係を10年延ばします。',
+    hold:'あなたが遠慮していること──それは「もっと甘えること」です。サソリのような強さで相手を守り、愛し、時には威嚇してしまうあなたですが、本当は誰より「抱きしめてほしい」「弱くてもいいと言ってほしい」という柔らかい部分を持っています。でもその柔らかさを見せると「負け」みたいな気がして、ついつい「別に大丈夫」「気にしてないし」と言ってしまう。もっとわがままでいい。「今日しんどかった、話聞いて」「一緒にいてくれるだけでいい」──その言葉があなたの口から出た瞬間、パートナーは「この人を一生守りたい」と思います。強いから愛されているんじゃない。強くて、でも時々ちゃんと弱いから──愛されるんです。今夜一回だけ、鎧を脱いでみてください。',
+    episode:'あなたたちのカップルを傍から見ると、なかなかスリリングです。たとえば合コンで知り合った古い友人グループに誘われた彼氏が「え、行っていい？」と聞いてきた瞬間、あなたの目が3秒間止まった話。彼氏は「やっぱりいい（即死）」と言い、その夜二人で鍋をした。または、あなたが「別に怒ってない」と言いながら明らかに怒っているオーラを5,000cc放出していたら、彼氏がいつの間にかお気に入りのスイーツを買ってきていた話。周りは「え、あの子怖くない？」と言うけど、パートナーだけは「あの目が好きなんだよな」と言う。世界で一人、あなたの毒を甘露として飲み干せる人──それがあなたのパートナーです。',
+    quote:'本物の愛は、相手の全部を引き受ける覚悟のこと。あなたの毒も、甘さも、全部含めて──それが愛だ。'
+  },
   isTarget:true},
 {min:71,max:75,lv:12,emoji:'🔥',name:'限界突破の不死鳥',en:'Immortal Phoenix',
   gradient:'linear-gradient(135deg,#C0392B,#F39C12,#E74C3C)',
   ecology:'不死鳥は自らの炎で燃え尽き、灰の中から何度でも蘇る。神話において「永遠の愛」と「再生」の象徴。死すらも愛を終わらせることができない。',
-  desc:'もう生物の枠を超えた。何度傷ついても、裏切られても、燃え尽きても、また愛してしまう。それは病気じゃない。もはや才能。「好きが重いって、最高じゃん。」—この言葉は、あなたのために生まれた。',
+  mainCopy:'愛の重さ、致死量突破。もはや概念。',
+  subCopy:'もはや生物学では説明できない領域',
+  desc:'燃え尽きても灰から蘇る、バグレベルの溺愛体質。既読スルーされても大喧嘩しても、一晩泣き明かせば翌朝「やっぱり好き、尊い」と愛が強制復活する恐怖のサイクル。あなたの愛はすでに人間の限界を突破し、神話の領域に突入しました。相手は一生、あなたの愛の業火から逃れられません。',
+  shareText:'溺愛診断やったら致死量超えの【不死鳥】なんだけど、これ私がヤバいの？それとも世間の愛が軽すぎるの？🔥 #aicha溺愛診断',
+  ctaText:'致死量の愛、そろそろ相手に"刻む"？',
+  attrs:{執着度:10,独占欲:9,自己犠牲度:10,表現力:10,自立度:2},
+  coupleTexts:{
+    seek:'あなたがパートナーに求めているのは「24時間365日、私だけを見ていて」という絶対的な注目です。既読スルーは「無視」ではなく「裏切り」として処理されます。30分の音信不通で安否確認LINEが飛び、1時間で電話、3時間で位置情報確認──これはあなたにとって「普通の愛情表現」です。気をつけてほしいのは、この愛の密度がパートナーにとって時に「監視」に感じられる瞬間があること。不死鳥の愛は「常時オンライン」が前提ですが、相手には「オフライン」の時間も必要です。大事なのは「信じてないから確認する」のではなく「好きすぎて気になる」という気持ちの伝え方。「今何してるか気になっちゃった、迷惑じゃなければ教えて？」──この一言の語尾に「？」をつけるだけで、監視が愛情に変わります。あなたの愛は致死量ですが、投与量を微調整すれば最高の特効薬になります。',
+    hold:'あなたが飲み込んでいる言葉の量は、普通の人の10倍です。「寂しい」「会いたい」「もっと連絡してほしい」──これらを全部言うと「重い」と思われると怖くて、代わりに「大丈夫」と言ってしまう。でも聞いてください。あなたのパートナーはあなたの重さを選んで隣にいます。「重い愛」を知った上で、それでも「この人がいい」と言ってくれた人です。だからもっとわがままでいいんです。「今夜声聞きたい」「次の週末絶対会いたい」「私のことどのくらい好き？教えて」──これ全部言っていい。愛を遠慮するのは、相手への本当の信頼じゃない。あなたが全力で甘えることで、相手は「必要とされている」という確かな喜びを得ます。あなたの「寂しい」は相手への最高のギフトです。今夜、一つだけ本音を言ってみてください。',
+    episode:'周りから「やばい」と言われる場面、数えきれないほどありますよね。たとえば──彼氏が2時間LINEを返さなかっただけで、「事故った？病院行く？」という心配LINEを10通送り、最後に「あ、寝てただけか。よかった（怒）」という奇跡の結末を迎えた夜。または旅行先でたまたま撮れた夕陽の写真を「あなたに見せたかったから撮ったんだよ」とパートナーに送ったら、「えっ俺のこと考えながら夕陽見てたの？」と感動させてしまった瞬間。周りには「重すぎる」と引かれ、でもパートナーには「世界一愛されてる気がする」と言わしめる。それがあなたたちカップルの日常。「理解されない」のは当たり前──あなたたちの愛の密度は、一般人の語彙では説明できないのだから。',
+    quote:'愛とは、相手の呼吸のリズムを覚えてしまうこと。あなたはもうとっくに、彼の心拍と同期している。'
+  },
   isTarget:true},
 ];
 
@@ -296,6 +603,34 @@ const dimNames={A:'執着不安',B:'承認欲求',C:'感情融合',D:'行動束�
 const dimColors={A:'#E74C6F',B:'#E8A87C',C:'#D4736C',D:'#C4A265',E:'#9B6B8A'};
 const dimDescs={A:'別離不安。愛着理論における「不安型愛着」の中核。',B:'承認・言語的愛情の要求度。PCMの「感情型」。',C:'自他境界の曖昧さ。交流分析の「共生関係」。',D:'相手の行動を把握・制限したい度合い。',E:'自己犠牲で関係を維持する傾向。共依存の核心。'};
 
+// ===== v3: COMPAT GROUPS =====
+var COMPAT_GROUPS = [
+  {id:'legendary',name:'伝説級カップル',emoji:'🔥',color:'#B03050',
+   condition:function(a,b){return a.lv>=7 && b.lv>=7}},
+  {id:'dominance',name:'支配と献身',emoji:'👑',color:'#9B6B8A',
+   condition:function(a,b){return (a.lv>=8 && b.lv<=3)||(b.lv>=8 && a.lv<=3)}},
+  {id:'opposite',name:'正反対の引力',emoji:'⚡',color:'#E8A87C',
+   condition:function(a,b){return Math.abs(a.lv-b.lv)>=4}},
+  {id:'quiet',name:'静かな愛',emoji:'🌙',color:'#8E9AAF',
+   condition:function(a,b){return a.lv<=4 && b.lv<=4}},
+  {id:'miracle',name:'奇跡のバランス',emoji:'💫',color:'#5B9BD5',
+   condition:function(a,b){return Math.abs(a.lv-b.lv)<=3}}
+];
+
+function getCompatGroup(typeA, typeB) {
+  for (var i = 0; i < COMPAT_GROUPS.length; i++) {
+    if (COMPAT_GROUPS[i].condition(typeA, typeB)) return COMPAT_GROUPS[i];
+  }
+  return COMPAT_GROUPS[COMPAT_GROUPS.length - 1];
+}
+
+function interpolateTemplate(template, vars) {
+  return template.replace(/\{\{(\w+)\.(\w+)\}\}/g, function(match, obj, key) {
+    if (vars[obj] && vars[obj][key] !== undefined) return vars[obj][key];
+    return match;
+  });
+}
+
 function selectMode(m){mode=m;document.getElementById('mode-solo').classList.toggle('selected',m==='solo');document.getElementById('mode-couple').classList.toggle('selected',m==='couple');document.getElementById('couple-code-area').classList.toggle('hidden',m!=='couple')}
 
 function startQuiz(){
@@ -307,128 +642,610 @@ function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classL
 function renderQuestion(){
   const q=questions[currentQ];const pct=(currentQ/questions.length*100).toFixed(0);
   document.getElementById('progressBar').style.width=pct+'%';
-  document.getElementById('progressLabel').textContent=`Q${currentQ+1} / ${questions.length}`;
+  document.getElementById('progressLabel').textContent='Q'+(currentQ+1)+' / '+questions.length;
   document.getElementById('progressCategory').textContent=q.cat;
-  let h=`<div class="q-card" key="${currentQ}"><div class="q-category">${q.cat}</div><div class="q-number">Question ${currentQ+1}</div><div class="q-text">${q.text}</div><div class="options">`;
-  q.opts.forEach((o,i)=>{h+=`<div class="option" onclick="selectOption(${i},${o.score})"><div class="option-dot"></div><div>${o.text}</div></div>`});
-  h+=`</div></div>`;document.getElementById('questionArea').innerHTML=h;document.getElementById('nextBtn').disabled=true;
+  let h='<div class="q-card" key="'+currentQ+'"><div class="q-category">'+q.cat+'</div><div class="q-number">Question '+(currentQ+1)+'</div><div class="q-text">'+q.text+'</div><div class="options">';
+  q.opts.forEach(function(o,i){h+='<div class="option" onclick="selectOption('+i+','+o.score+')"><div class="option-dot"></div><div>'+o.text+'</div></div>'});
+  h+='</div></div>';document.getElementById('questionArea').innerHTML=h;document.getElementById('nextBtn').disabled=true;
 }
-function selectOption(idx,score){selectedScore=score;document.querySelectorAll('.option').forEach((o,i)=>o.classList.toggle('selected',i===idx));document.getElementById('nextBtn').disabled=false}
+function selectOption(idx,score){selectedScore=score;document.querySelectorAll('.option').forEach(function(o,i){o.classList.toggle('selected',i===idx)});document.getElementById('nextBtn').disabled=false}
 function nextQuestion(){if(selectedScore===null)return;answers.push({dim:questions[currentQ].dim,score:selectedScore});selectedScore=null;currentQ++;if(currentQ>=questions.length){document.getElementById('progressBar').style.width='100%';showResult()}else{renderQuestion()}}
 
-function calcScores(){const dims={A:0,B:0,C:0,D:0,E:0};answers.forEach(a=>dims[a.dim]+=a.score);const total=Object.values(dims).reduce((s,v)=>s+v,0);return{dims,total}}
-function encodeResult(dims){const e=v=>Math.round((v-3)/12*9);return'A'+e(dims.A)+'B'+e(dims.B)+'C'+e(dims.C)+'D'+e(dims.D)+'E'+e(dims.E)}
-function decodeResult(code){const m=code.match(/^A(\d)B(\d)C(\d)D(\d)E(\d)$/);if(!m)return null;const d=v=>Math.round(parseInt(v)/9*12+3);return{dims:{A:d(m[1]),B:d(m[2]),C:d(m[3]),D:d(m[4]),E:d(m[5])},total:d(m[1])+d(m[2])+d(m[3])+d(m[4])+d(m[5])}}
+function calcScores(){var dims={A:0,B:0,C:0,D:0,E:0};answers.forEach(function(a){dims[a.dim]+=a.score});var total=Object.values(dims).reduce(function(s,v){return s+v},0);return{dims:dims,total:total}}
+function encodeResult(dims){var e=function(v){return Math.round((v-3)/12*9)};return'A'+e(dims.A)+'B'+e(dims.B)+'C'+e(dims.C)+'D'+e(dims.D)+'E'+e(dims.E)}
+function decodeResult(code){var m=code.match(/^A(\d)B(\d)C(\d)D(\d)E(\d)$/);if(!m)return null;var d=function(v){return Math.round(parseInt(v)/9*12+3)};return{dims:{A:d(m[1]),B:d(m[2]),C:d(m[3]),D:d(m[4]),E:d(m[5])},total:d(m[1])+d(m[2])+d(m[3])+d(m[4])+d(m[5])}}
 
-function getAnimal(total){return animals.find(a=>total>=a.min&&total<=a.max)||animals[animals.length-1]}
+function getAnimal(total){return animals.find(function(a){return total>=a.min&&total<=a.max})||animals[animals.length-1]}
 
+// ===== TYPEWRITER EFFECT =====
+function typewriterEffect(el, text, speed, callback) {
+  var i = 0;
+  el.textContent = '';
+  function type() {
+    if (i < text.length) {
+      el.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    } else if (callback) {
+      callback();
+    }
+  }
+  type();
+}
+
+// ===== HEART PARTICLES (Phase 2) =====
+function spawnHeartParticles() {
+  var container = document.createElement('div');
+  container.className = 'particle-container';
+  document.body.appendChild(container);
+  var hearts = ['♡','♥','❤','💕','💗','💖','💘'];
+  for (var i = 0; i < 30; i++) {
+    (function(idx) {
+      setTimeout(function() {
+        var p = document.createElement('span');
+        p.className = 'heart-particle';
+        p.textContent = hearts[idx % hearts.length];
+        p.style.left = (Math.random() * 100) + '%';
+        p.style.fontSize = (12 + Math.random() * 16) + 'px';
+        p.style.animationDuration = (3 + Math.random() * 4) + 's';
+        container.appendChild(p);
+      }, idx * 150);
+    })(i);
+  }
+  setTimeout(function() { container.remove(); }, 8000);
+}
+
+// ===== AWAKENING ANIMATION (Phase 2) =====
+function triggerAwakening(a) {
+  // Shake
+  var resultEl = document.getElementById('screen-result');
+  resultEl.classList.add('screen-shake');
+  setTimeout(function() { resultEl.classList.remove('screen-shake'); }, 300);
+
+  // Background shift
+  document.body.classList.add('bg-awakened');
+  setTimeout(function() { document.body.classList.add('active'); }, 100);
+  // Actually add the class to body with the 'active' state
+  var bodyEl = document.body;
+  if (!bodyEl.querySelector('.bg-awakened-overlay')) {
+    var overlay = document.createElement('div');
+    overlay.className = 'bg-awakened-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:-1;transition:opacity 1.5s ease;opacity:0;background:linear-gradient(180deg,rgba(45,27,61,0) 0%,rgba(45,27,61,0.3) 50%,rgba(26,26,46,0.5) 100%)';
+    bodyEl.appendChild(overlay);
+    setTimeout(function() { overlay.style.opacity = '1'; }, 50);
+  }
+
+  // Show awakening section
+  var awakenArea = document.getElementById('awakeningArea');
+  if (awakenArea) {
+    awakenArea.innerHTML = '<div class="awakening-section" id="awakenSection">' +
+      '<div class="awakening-lock" id="awakenLock">🔒</div>' +
+      '<div class="awakening-text" id="awakenText">あなたの溺愛度は"限定解除レベル"です</div>' +
+      '</div>';
+    setTimeout(function() {
+      document.getElementById('awakenSection').classList.add('visible');
+      setTimeout(function() {
+        var lock = document.getElementById('awakenLock');
+        lock.textContent = '🔓';
+        lock.classList.add('unlocked');
+        setTimeout(function() {
+          document.getElementById('awakenText').classList.add('visible');
+          spawnHeartParticles();
+          // Slide up CTA
+          var cta = document.getElementById('ctaBanner');
+          if (cta) {
+            cta.style.opacity = '0';
+            cta.style.transform = 'translateY(30px)';
+            cta.style.transition = 'all .6s ease';
+            setTimeout(function() {
+              cta.style.opacity = '1';
+              cta.style.transform = 'translateY(0)';
+            }, 300);
+          }
+        }, 500);
+      }, 300);
+    }, 200);
+  }
+}
+
+// ===== COMPATIBILITY SCORE (Phase 3) =====
+function calculateCompatibility(typeA, typeB) {
+  var attrsA = typeA.attrs;
+  var attrsB = typeB.attrs;
+  var keys = ['執着度','独占欲','自己犠牲度','表現力','自立度'];
+
+  // Complement score: how well they balance each other's weaknesses
+  var complementSum = 0;
+  keys.forEach(function(k) {
+    var diff = Math.abs(attrsA[k] - attrsB[k]);
+    // Sweet spot: moderate difference (3-5) is best for complement
+    if (diff >= 3 && diff <= 5) complementSum += 10;
+    else if (diff >= 1 && diff <= 7) complementSum += 7;
+    else complementSum += 4;
+  });
+  var complementScore = (complementSum / 50) * 100;
+
+  // Resonance score: similarity breeds understanding
+  var resonanceSum = 0;
+  keys.forEach(function(k) {
+    var diff = Math.abs(attrsA[k] - attrsB[k]);
+    resonanceSum += Math.max(0, 10 - diff);
+  });
+  var resonanceScore = (resonanceSum / 50) * 100;
+
+  // Level diff bonus
+  var levelDiffBonus = Math.max(0, 20 - Math.abs(typeA.lv - typeB.lv) * 2);
+
+  var raw = Math.round(complementScore * 0.4 + resonanceScore * 0.4 + levelDiffBonus * 0.2);
+  // Clamp to 60-99
+  return Math.max(60, Math.min(99, raw));
+}
+
+// ===== v3: COUPLE COMPATIBILITY CARD RENDER =====
+function renderCoupleCard(myAnimal, partnerAnimal, myScores, theirScores) {
+  var compat = calculateCompatibility(myAnimal, partnerAnimal);
+  var group = getCompatGroup(myAnimal, partnerAnimal);
+  var h = '';
+
+  h += '<div class="compat-v3" id="compatV3" data-group-color="' + group.color + '">';
+
+  // Phase 0: Loading
+  h += '<div class="compat-loading" id="compatLoading">';
+  h += '<div class="compat-loading-particles"><div class="compat-particle-left"></div><div class="compat-particle-right"></div></div>';
+  h += '<div class="compat-loading-flash"></div>';
+  h += '<div class="compat-loading-text" id="compatLoadingText"></div>';
+  h += '</div>';
+
+  // Phase 1: Group Reveal
+  h += '<div class="compat-group-reveal hidden" id="compatGroupReveal" style="background:linear-gradient(135deg,' + group.color + '22,' + group.color + '44)">';
+  h += '<div class="compat-group-name" id="compatGroupName" style="text-shadow:0 2px 12px ' + group.color + '80">' + group.emoji + ' ' + group.name + '</div>';
+  h += '</div>';
+
+  // Phase 2: Dual Type Display
+  h += '<div class="compat-dual-type hidden" id="compatDualType" style="background:linear-gradient(135deg,#1a1a2e,#2d1b3d);border-radius:20px;padding:28px 12px">';
+  h += '<div class="compat-type-left"><span class="compat-type-emoji">' + myAnimal.emoji + '</span><div class="compat-type-info">Lv.' + myAnimal.lv + '<br>' + myAnimal.name + '</div></div>';
+  h += '<div class="compat-heart-center">💛</div>';
+  h += '<div class="compat-type-right"><span class="compat-type-emoji">' + partnerAnimal.emoji + '</span><div class="compat-type-info">Lv.' + partnerAnimal.lv + '<br>' + partnerAnimal.name + '</div></div>';
+  h += '</div>';
+
+  // Phase 3: Content Sections (Intersection Observer controlled)
+  // ① 求めがち
+  h += '<div class="compat-seek-card compat-reveal">';
+  h += '<span class="card-icon">⚠️</span>';
+  h += '<div class="card-title">これを求めがち</div>';
+  h += '<div class="card-subtitle">──だから気をつけてね</div>';
+  h += '<div class="card-body">' + myAnimal.coupleTexts.seek + '</div>';
+  h += '</div>';
+
+  // ② 遠慮しがち
+  h += '<div class="compat-hold-card compat-reveal">';
+  h += '<span class="card-icon">💝</span>';
+  h += '<div class="card-title">遠慮しがち</div>';
+  h += '<div class="card-subtitle">──もっとわがままでいいんだよ</div>';
+  h += '<div class="card-body">' + myAnimal.coupleTexts.hold + '</div>';
+  h += '</div>';
+
+  // ③ ヤバいエピソード
+  h += '<div class="compat-episode-card compat-reveal">';
+  h += '<div class="card-title">あなたたちのヤバい日常</div>';
+  h += '<div class="card-subtitle">──でもそれが最高</div>';
+  // Split episode into paragraphs for stagger animation
+  var epParts = myAnimal.coupleTexts.episode.split('。').filter(function(s){return s.trim()});
+  var epHtml = '';
+  for (var ep = 0; ep < epParts.length; ep++) {
+    epHtml += '<span class="episode-paragraph" data-ep-idx="' + ep + '">' + epParts[ep] + '。</span>';
+  }
+  h += '<div class="card-body">' + epHtml + '</div>';
+  // Star particles
+  for (var si = 0; si < 5; si++) {
+    h += '<span class="compat-episode-star" style="top:' + (10+Math.random()*80) + '%;left:' + (5+Math.random()*90) + '%;animation-delay:' + (Math.random()*3) + 's;animation-duration:' + (4+Math.random()*4) + 's">✦</span>';
+  }
+  h += '</div>';
+
+  // ④ 格言
+  h += '<div class="compat-quote-card compat-reveal" id="compatQuoteCard">';
+  h += '<div class="quote-gem">💎</div>';
+  h += '<div class="quote-title">二人に贈る今日の格言</div>';
+  h += '<div class="quote-text" id="compatQuoteText"></div>';
+  h += '<div class="quote-attr">── aicha ──</div>';
+  h += '</div>';
+
+  // ⑤ Share CTA
+  h += '<div class="compat-share-cta compat-reveal" id="compatShareCta">';
+  h += '<div class="cta-main-text">この相性、みんなに見せつけたい</div>';
+  h += '<div class="compat-actions" style="margin-top:0">';
+  h += '<button class="btn btn-gold cta-glow" onclick="saveCompatCard()">📷 相性カードを保存</button>';
+  h += '<div class="sns-share-row" style="margin-top:8px">';
+  h += '<button class="btn btn-twitter" onclick="shareTwitter()">𝕏 ポスト</button>';
+  h += '<button class="btn btn-line" onclick="shareLINE()">LINE</button>';
+  h += '<button class="btn btn-outline-light" onclick="shareCoupleResult()">🔗 コピー</button>';
+  h += '</div>';
+  if (myAnimal.isTarget || partnerAnimal.isTarget) {
+    h += '<div class="cta-sub">二人で着る？ 30組限定のペアルック →</div>';
+    h += '<a href="https://aicha.official.ec/items/136344979" target="_blank" rel="noopener" class="btn btn-gold" style="margin-top:4px">👜 ペアルックを見る</a>';
+  }
+  h += '<button class="btn btn-outline-light" onclick="retry()" style="margin-top:8px;font-size:12px">結果が変わったらどうする？ もう一回やってみる</button>';
+  h += '</div>';
+  h += '</div>';
+
+  h += '</div>';
+  return {html: h, quote: myAnimal.coupleTexts.quote, group: group, myAnimal: myAnimal, partnerAnimal: partnerAnimal};
+}
+
+// ===== v3: START COMPAT ANIMATION =====
+function startCompatAnimation(cardData) {
+  // Phase 0: Typewriter loading text
+  var loadingTextEl = document.getElementById('compatLoadingText');
+  if (loadingTextEl) {
+    typewriterEffect(loadingTextEl, '二人の愛を解析中...', 80);
+  }
+
+  // Phase 1: Group reveal at 2.2s
+  setTimeout(function() {
+    var loading = document.getElementById('compatLoading');
+    if (loading) loading.style.display = 'none';
+    var groupReveal = document.getElementById('compatGroupReveal');
+    if (groupReveal) {
+      groupReveal.classList.remove('hidden');
+      setTimeout(function() {
+        var groupName = document.getElementById('compatGroupName');
+        if (groupName) groupName.classList.add('revealed');
+      }, 100);
+      // Vibration for legendary
+      if (cardData.group.id === 'legendary' && navigator.vibrate) {
+        navigator.vibrate(300);
+      }
+      if (cardData.group.id === 'legendary') {
+        spawnHeartParticles();
+      }
+    }
+  }, 2200);
+
+  // Phase 2: Dual type at 4s
+  setTimeout(function() {
+    var dualType = document.getElementById('compatDualType');
+    if (dualType) {
+      dualType.classList.remove('hidden');
+      setTimeout(function() {
+        var left = dualType.querySelector('.compat-type-left');
+        var right = dualType.querySelector('.compat-type-right');
+        if (left) left.classList.add('slid-in');
+        if (right) right.classList.add('slid-in');
+      }, 100);
+    }
+  }, 4000);
+
+  // Phase 3: Setup Intersection Observer at 6s
+  setTimeout(function() {
+    setupCompatObserver(cardData.quote);
+  }, 6000);
+}
+
+// ===== v3: INTERSECTION OBSERVER FOR COMPAT SECTIONS =====
+function setupCompatObserver(quoteText) {
+  var sections = document.querySelectorAll('.compat-reveal');
+  if (!sections.length) return;
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('compat-visible');
+        observer.unobserve(entry.target);
+
+        // Episode paragraphs stagger
+        if (entry.target.classList.contains('compat-episode-card')) {
+          var paragraphs = entry.target.querySelectorAll('.episode-paragraph');
+          paragraphs.forEach(function(p, idx) {
+            setTimeout(function() { p.classList.add('ep-visible'); }, idx * 500);
+          });
+        }
+
+        // Quote typewriter
+        if (entry.target.id === 'compatQuoteCard') {
+          var quoteEl = document.getElementById('compatQuoteText');
+          if (quoteEl && quoteText) {
+            typewriterEffect(quoteEl, '「' + quoteText + '」', 50, function() {
+              entry.target.classList.add('quote-pulsed');
+            });
+          }
+        }
+
+        // CTA glow
+        if (entry.target.id === 'compatShareCta') {
+          var glowBtn = entry.target.querySelector('.cta-glow');
+          if (glowBtn) glowBtn.style.animationPlayState = 'running';
+        }
+      }
+    });
+  }, {threshold: 0.3});
+
+  sections.forEach(function(s) { observer.observe(s); });
+}
+
+// ===== SAVE COMPAT CARD AS IMAGE (Phase 4) =====
+function saveCompatCard() {
+  var card = document.getElementById('compatV3') || document.getElementById('compatCard');
+  if (!card) return;
+  // Temporarily add fixed dimensions for capture
+  card.style.width = '520px';
+  html2canvas(card, {
+    backgroundColor: '#1a1a2e',
+    scale: 2,
+    useCORS: true,
+    logging: false
+  }).then(function(canvas) {
+    card.style.width = '';
+    var link = document.createElement('a');
+    link.download = 'aicha_相性カード.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }).catch(function() {
+    card.style.width = '';
+    alert('画像の生成に失敗しました。スクリーンショットをお試しください。');
+  });
+}
+
+// ===== SHOW RESULT (v2) =====
 function showResult(){
-  const scores=calcScores();const code=encodeResult(scores.dims);const a=getAnimal(scores.total);const pct=Math.round((scores.total-15)/60*100);
-  let h='';
+  var scores = calcScores();
+  var code = encodeResult(scores.dims);
+  var a = getAnimal(scores.total);
+  var h = '';
 
   // Animal Card
-  h+=`<div class="animal-card" style="background:${a.gradient};animation:cardReveal .8s ease">`;
-  h+=`<div class="lv-badge">Lv.${a.lv} / 12</div>`;
-  h+=`<div class="animal-emoji">${a.emoji}</div>`;
-  h+=`<div class="animal-name">${a.name}</div>`;
-  h+=`<div class="animal-sub">${a.en}</div>`;
-  h+=`<div class="score-big">${scores.total}<span> / 75</span></div>`;
-  h+=`</div>`;
+  h += '<div class="animal-card" style="background:' + a.gradient + '">';
+  h += '<div class="lv-badge">Lv.' + a.lv + ' / 12</div>';
+  h += '<div class="animal-emoji animal-bounce">' + a.emoji + '</div>';
+  h += '<div class="animal-name">' + a.name + '</div>';
+  h += '<div class="animal-sub">' + a.en + '</div>';
+  h += '<div class="score-big">' + scores.total + '<span> / 75</span></div>';
+  h += '</div>';
+
+  // Main Copy (typewriter) + Sub Copy
+  h += '<div class="main-copy-area">';
+  h += '<div class="main-copy-text" id="mainCopyText"></div>';
+  h += '<div class="sub-copy-text" id="subCopyText">~' + a.subCopy + '~</div>';
+  h += '</div>';
 
   // Description
-  h+=`<div class="bio-card">`;
-  h+=`<div class="bio-title">💬 あなたの溺愛スタイル</div>`;
-  h+=`${a.desc}`;
-  h+=`<div class="ecology">🔬 <strong>この動物の生態：</strong><br>${a.ecology}</div>`;
-  h+=`</div>`;
+  h += '<div class="bio-card">';
+  h += '<div class="bio-title">💬 あなたの溺愛スタイル</div>';
+  h += '<div id="descText">' + a.desc + '</div>';
+  h += '<div class="ecology">🔬 <strong>この動物の生態：</strong><br>' + a.ecology + '</div>';
+  h += '</div>';
+
+  // Awakening area placeholder
+  h += '<div id="awakeningArea"></div>';
 
   // 5-Dimension bars
-  h+=`<div class="dim-section"><h3>📊 5次元分析</h3>`;
-  Object.keys(dimNames).forEach(d=>{
-    const val=scores.dims[d];const dimPct=Math.round((val-3)/12*100);
-    h+=`<div class="dim-row"><div class="dim-label"><span>${dimNames[d]}</span><span>${val} / 15</span></div>`;
-    h+=`<div class="dim-bar"><div class="dim-bar-fill" style="width:${dimPct}%;background:${dimColors[d]}"></div></div></div>`;
+  h += '<div class="dim-section"><h3>📊 5次元分析</h3>';
+  ['A','B','C','D','E'].forEach(function(d){
+    var val = scores.dims[d];
+    var dimPct = Math.round((val - 3) / 12 * 100);
+    h += '<div class="dim-row"><div class="dim-label"><span>' + dimNames[d] + '</span><span>' + val + ' / 15</span></div>';
+    h += '<div class="dim-bar"><div class="dim-bar-fill" style="width:' + dimPct + '%;background:' + dimColors[d] + '"></div></div></div>';
   });
-  h+=`<div style="margin-top:14px;font-size:11px;color:var(--text-muted);line-height:1.7">`;
-  Object.keys(dimDescs).forEach(d=>{h+=`<div style="margin-bottom:3px"><strong style="color:${dimColors[d]}">${dimNames[d]}：</strong>${dimDescs[d]}</div>`});
-  h+=`</div></div>`;
+  h += '<div style="margin-top:14px;font-size:11px;color:var(--text-muted);line-height:1.7">';
+  ['A','B','C','D','E'].forEach(function(d){h += '<div style="margin-bottom:3px"><strong style="color:' + dimColors[d] + '">' + dimNames[d] + '：</strong>' + dimDescs[d] + '</div>'});
+  h += '</div></div>';
 
   // Tier List
-  h+=`<div class="tier-list"><h3>🏆 全12タイプ一覧</h3>`;
-  animals.forEach(t=>{
-    const isCurrent=t.lv===a.lv;
-    h+=`<div class="tier-row${isCurrent?' current':''}">`;
-    h+=`<div class="t-emoji">${t.emoji}</div>`;
-    h+=`<div class="t-name">${isCurrent?'▶ ':''}${t.name}</div>`;
-    h+=`<div class="t-range">${t.min}〜${t.max}</div>`;
-    h+=`</div>`;
+  h += '<div class="tier-list"><h3>🏆 全12タイプ一覧</h3>';
+  animals.forEach(function(t){
+    var isCurrent = t.lv === a.lv;
+    h += '<div class="tier-row' + (isCurrent ? ' current' : '') + '">';
+    h += '<div class="t-emoji">' + t.emoji + '</div>';
+    h += '<div class="t-name">' + (isCurrent ? '▶ ' : '') + t.name + '</div>';
+    h += '<div class="t-range">' + t.min + '〜' + t.max + '</div>';
+    h += '</div>';
   });
-  h+=`</div>`;
+  h += '</div>';
 
-  // Couple
-  if(partnerScores){
-    const my=scores.total,their=partnerScores.total,balance=my/(my+their)*100,diff=my-their;
-    const pa=getAnimal(their);
-    let analysis='';
-    if(Math.abs(diff)<=5)analysis=`二人とも同じくらいの溺愛度！「${a.name}」と「${pa.name}」のお似合いカップル。息ぴったりの溺愛コンビ。`;
-    else if(diff>5)analysis=`あなた(${a.name})の方が${diff}ポイント重い！愛が先行している分、時に不安を感じることも。相手にも甘えてもらう空間を作ると天秤が安定するかも。`;
-    else analysis=`相手(${pa.name})の方が${Math.abs(diff)}ポイント重い！実はあなたが愛される側。その愛、ちゃんと受け止めてあげてね。`;
+  // Couple comparison
+  if (partnerScores) {
+    var my = scores.total, their = partnerScores.total, balance = my / (my + their) * 100, diff = my - their;
+    var pa = getAnimal(their);
+    var analysis = '';
+    if (Math.abs(diff) <= 5) analysis = '二人とも同じくらいの溺愛度！「' + a.name + '」と「' + pa.name + '」のお似合いカップル。息ぴったりの溺愛コンビ。';
+    else if (diff > 5) analysis = 'あなた(' + a.name + ')の方が' + diff + 'ポイント重い！愛が先行している分、時に不安を感じることも。相手にも甘えてもらう空間を作ると天秤が安定するかも。';
+    else analysis = '相手(' + pa.name + ')の方が' + Math.abs(diff) + 'ポイント重い！実はあなたが愛される側。その愛、ちゃんと受け止めてあげてね。';
 
-    h+=`<div class="couple-section"><h3>💑 カップル愛の天秤</h3>`;
-    h+=`<div class="couple-compare">`;
-    h+=`<div class="couple-person"><div class="emoji">${a.emoji}</div><div class="name">あなた</div><div class="score">${my}</div></div>`;
-    h+=`<div class="couple-vs">⚖️</div>`;
-    h+=`<div class="couple-person"><div class="emoji">${pa.emoji}</div><div class="name">相手</div><div class="score">${their}</div></div>`;
-    h+=`</div>`;
-    h+=`<div class="couple-balance-bar"><div class="couple-balance-dot" style="left:calc(${balance}% - 10px)"></div></div>`;
-    h+=`<div class="couple-balance-labels"><span>相手が重い</span><span>均衡</span><span>あなたが重い</span></div>`;
-    h+=`<div class="couple-analysis">${analysis}</div>`;
+    h += '<div class="couple-section"><h3>💑 カップル愛の天秤</h3>';
+    h += '<div class="couple-compare">';
+    h += '<div class="couple-person"><div class="emoji">' + a.emoji + '</div><div class="name">あなた</div><div class="score">' + my + '</div></div>';
+    h += '<div class="couple-vs">⚖️</div>';
+    h += '<div class="couple-person"><div class="emoji">' + pa.emoji + '</div><div class="name">相手</div><div class="score">' + their + '</div></div>';
+    h += '</div>';
+    h += '<div class="couple-balance-bar"><div class="couple-balance-dot" style="left:calc(' + balance + '% - 10px)"></div></div>';
+    h += '<div class="couple-balance-labels"><span>相手が重い</span><span>均衡</span><span>あなたが重い</span></div>';
+    h += '<div class="couple-analysis">' + analysis + '</div>';
 
-    h+=`<div style="margin-top:16px">`;
-    Object.keys(dimNames).forEach(d=>{
-      const myV=scores.dims[d],thV=partnerScores.dims[d],myP=(myV-3)/12*100,thP=(thV-3)/12*100;
-      h+=`<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">${dimNames[d]}</div>`;
-      h+=`<div style="display:flex;gap:4px;align-items:center">`;
-      h+=`<div style="flex:1;height:6px;background:#F0E6E7;border-radius:3px;overflow:hidden"><div style="height:100%;width:${myP}%;background:${dimColors[d]};border-radius:3px"></div></div>`;
-      h+=`<div style="font-size:10px;color:var(--text-muted);min-width:40px;text-align:center">${myV}:${thV}</div>`;
-      h+=`<div style="flex:1;height:6px;background:#F0E6E7;border-radius:3px;overflow:hidden;direction:rtl"><div style="height:100%;width:${thP}%;background:${dimColors[d]};opacity:0.5;border-radius:3px"></div></div>`;
-      h+=`</div></div>`;
+    h += '<div style="margin-top:16px">';
+    ['A','B','C','D','E'].forEach(function(d){
+      var myV = scores.dims[d], thV = partnerScores.dims[d], myP = (myV - 3) / 12 * 100, thP = (thV - 3) / 12 * 100;
+      h += '<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:600;margin-bottom:3px">' + dimNames[d] + '</div>';
+      h += '<div style="display:flex;gap:4px;align-items:center">';
+      h += '<div style="flex:1;height:6px;background:#F0E6E7;border-radius:3px;overflow:hidden"><div style="height:100%;width:' + myP + '%;background:' + dimColors[d] + ';border-radius:3px"></div></div>';
+      h += '<div style="font-size:10px;color:var(--text-muted);min-width:40px;text-align:center">' + myV + ':' + thV + '</div>';
+      h += '<div style="flex:1;height:6px;background:#F0E6E7;border-radius:3px;overflow:hidden;direction:rtl"><div style="height:100%;width:' + thP + '%;background:' + dimColors[d] + ';opacity:0.5;border-radius:3px"></div></div>';
+      h += '</div></div>';
     });
-    h+=`</div></div>`;
+    h += '</div>';
+
+    h += '</div>';
+
+    // v3: Couple Compatibility Card with phased animation
+    var cardData = renderCoupleCard(a, pa, scores, partnerScores);
+    h += cardData.html;
   }
 
   // Share Code
-  h+=`<div class="partner-input-section"><h3>🔗 相手に送るコード</h3>`;
-  h+=`<div class="code-display">${code}</div>`;
-  h+=`<div style="font-size:12px;color:var(--text-light);line-height:1.7">このコードを恋人に送って<br>「カップルで比較する」モードで入力してもらおう！</div></div>`;
+  h += '<div class="partner-input-section" id="shareCodeSection"><h3>🔗 相手に送るコード</h3>';
+  h += '<div class="code-display">' + code + '</div>';
+  h += '<div style="font-size:12px;color:var(--text-light);line-height:1.7">あなたの恋人、何タイプだった？<br>まさか私より重い…？</div></div>';
 
-  // CTA (target only)
-  if(a.isTarget){
-    h+=`<div class="aicha-cta">`;
-    h+=`<h3>好きが重いって、最高じゃん。</h3>`;
-    h+=`<p>その溢れる愛を、カタチにしよう。<br>aicha のペアルック T シャツで<br>「一緒に着ようよ！」って言ってみない？</p>`;
-    h+=`<a href="https://aicha.official.ec/items/136344979" target="_blank" rel="noopener" class="btn">aicha SHOP を見る →</a>`;
-    h+=`</div>`;
+  // CTA
+  if (a.isTarget) {
+    h += '<div class="aicha-cta awakening-cta" id="ctaBanner">';
+    h += '<h3>Lv.' + a.lv + '認定。この愛、纏えます。→ 30組限定</h3>';
+    h += '<p>その溢れる愛を、カタチにしよう。<br>aicha の暗号ペアルックで<br>「一緒に着ようよ！」って言ってみない？</p>';
+    h += '<a href="https://aicha.official.ec/items/136344979" target="_blank" rel="noopener" class="btn">溺愛カップル限定ペアルック →</a>';
+    h += '</div>';
+  } else {
+    h += '<div class="teaser-cta">';
+    h += '<div class="teaser-lock">🔒</div>';
+    h += '<div class="teaser-text">Lv.5以上の人だけが見える特別なオファーがあるらしい…？</div>';
+    h += '</div>';
   }
 
-  // Share / Retry
-  h+=`<div class="share-row">`;
-  h+=`<button class="btn btn-secondary" onclick="shareResult()">結果をシェア</button>`;
-  h+=`<button class="btn btn-secondary" onclick="retry()">もう一度やる</button>`;
-  h+=`</div>`;
+  // SNS Share Buttons
+  h += '<div class="sns-share-row">';
+  h += '<button class="btn btn-twitter" onclick="shareTwitter()">𝕏 ポスト</button>';
+  h += '<button class="btn btn-line" onclick="shareLINE()">LINE</button>';
+  h += '<button class="btn btn-secondary" onclick="shareResult()">📋 コピー</button>';
+  h += '</div>';
 
-  h+=`<div class="footer"><strong>参考理論</strong><br>Bowlby (1969) 愛着理論 / Brennan et al. (1998) ECR尺度<br>Bartholomew & Horowitz (1991) 4カテゴリモデル<br>Berne (1961) 交流分析 / Kahler (1982) PCM<br>Beattie (1987) 共依存理論<br><br><a href="https://aicha-store.com" target="_blank">aicha-store.com</a></div>`;
+  // Retry (Lv.1-4 only)
+  if (!a.isTarget) {
+    h += '<div style="margin-top:12px"><button class="btn btn-secondary" onclick="retry()">もう一度やる</button></div>';
+  }
 
-  document.getElementById('resultContent').innerHTML=h;showScreen('screen-result');
+  h += '<div class="footer"><strong>参考理論</strong><br>Bowlby (1969) 愛着理論 / Brennan et al. (1998) ECR尺度<br>Bartholomew & Horowitz (1991) 4カテゴリモデル<br>Berne (1961) 交流分析 / Kahler (1982) PCM<br>Beattie (1987) 共依存理論<br><br><a href="https://aicha-store.com" target="_blank">aicha-store.com</a></div>';
+
+  document.getElementById('resultContent').innerHTML = h;
+  showScreen('screen-result');
+
+  // v3: Set sticky code
+  var stickyCodeEl = document.getElementById('stickyCode');
+  if (stickyCodeEl) stickyCodeEl.textContent = code;
+  window._resultCode = code;
+
+  // v3: Setup sticky header scroll listener
+  setupStickyBanner();
+
+  // Typewriter effect
+  typewriterEffect(document.getElementById('mainCopyText'), a.mainCopy, 50, function() {
+    document.getElementById('subCopyText').classList.add('visible');
+    if (a.isTarget) {
+      setTimeout(function() { triggerAwakening(a); }, 1000);
+    }
+  });
+
+  // v3: Start compat card animation when it enters viewport
+  if (partnerScores && typeof cardData !== 'undefined') {
+    var compatContainer = document.getElementById('compatV3');
+    if (compatContainer) {
+      var compatObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            compatObserver.unobserve(entry.target);
+            startCompatAnimation(cardData);
+          }
+        });
+      }, {threshold: 0.1});
+      compatObserver.observe(compatContainer);
+    }
+  }
 }
 
+// ===== SHARE FUNCTIONS =====
 function shareResult(){
-  const scores=calcScores();const a=getAnimal(scores.total);const code=encodeResult(scores.dims);
-  const text=`【溺愛度診断 by aicha】\n\n${a.emoji} ${a.name}\nLv.${a.lv} / 12\nスコア: ${scores.total} / 75\n\n結果コード: ${code}\n（相手に送ってカップル比較しよう！）\n\n「好きが重いって、最高じゃん。」\n▶ https://aicha-store.com\n\n#aicha溺愛診断 #溺愛度 #メンヘラチェッカー`;
-  if(navigator.share){navigator.share({title:'溺愛度診断 by aicha',text}).catch(()=>{})}
-  else{navigator.clipboard.writeText(text).then(()=>alert('結果をコピーしました！SNSに貼ってね♡'))}
+  var scores = calcScores();
+  var a = getAnimal(scores.total);
+  var code = encodeResult(scores.dims);
+  var text = a.shareText + '\n\n結果コード: ' + code + '\n（相手に送ってカップル比較しよう！）\n▶ https://aicha-store.com/shindan';
+  if (navigator.share) {
+    navigator.share({title: '溺愛度診断 by aicha', text: text}).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(text).then(function() { alert('結果をコピーしました！SNSに貼ってね♡'); });
+  }
 }
-function retry(){mode='solo';partnerScores=null;showScreen('screen-intro');selectMode('solo')}
+
+function shareTwitter() {
+  var scores = calcScores();
+  var a = getAnimal(scores.total);
+  var text = encodeURIComponent(a.shareText + '\n▶ https://aicha-store.com/shindan');
+  window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
+}
+
+function shareLINE() {
+  var scores = calcScores();
+  var a = getAnimal(scores.total);
+  var code = encodeResult(scores.dims);
+  var text = encodeURIComponent(a.shareText + '\n\n結果コード: ' + code + '\n▶ https://aicha-store.com/shindan');
+  window.open('https://social-plugins.line.me/lineit/share?url=&text=' + text, '_blank');
+}
+
+function shareCoupleResult() {
+  var scores = calcScores();
+  var a = getAnimal(scores.total);
+  var pa = partnerScores ? getAnimal(partnerScores.total) : null;
+  if (!pa) return shareResult();
+  var group = getCompatGroup(a, pa);
+  var text = '私たち【' + group.name + '】だった' + group.emoji + ' ' + a.emoji + a.name + '×' + pa.emoji + pa.name + '\n\n▶ https://aicha-store.com/shindan\n\n#aicha溺愛診断 #溺愛カップル';
+  if (navigator.share) {
+    navigator.share({title: 'aicha 溺愛相性カード', text: text}).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(text).then(function() { alert('カップル結果をコピーしました！'); });
+  }
+}
+
+function retry(){
+  mode = 'solo';
+  partnerScores = null;
+  // Clean up awakening overlay
+  var overlay = document.body.querySelector('.bg-awakened-overlay');
+  if (overlay) overlay.remove();
+  document.body.classList.remove('bg-awakened');
+  // v3: Hide sticky banner
+  var stickyBanner = document.getElementById('stickyCompareBanner');
+  if (stickyBanner) stickyBanner.classList.remove('sticky-visible');
+  if (window._stickyCleanup) { window._stickyCleanup(); window._stickyCleanup = null; }
+  showScreen('screen-intro');
+  selectMode('solo');
+}
+
+// ===== v3: STICKY COMPARE BANNER =====
+function setupStickyBanner() {
+  var banner = document.getElementById('stickyCompareBanner');
+  if (!banner) return;
+  var resultContent = document.getElementById('resultContent');
+  var shareCodeSection = document.getElementById('shareCodeSection');
+  if (!resultContent) return;
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.target === resultContent) {
+        if (entry.isIntersecting) {
+          banner.classList.add('sticky-visible');
+        }
+      }
+      if (entry.target === shareCodeSection && entry.isIntersecting) {
+        banner.classList.remove('sticky-visible');
+      }
+    });
+  }, {threshold: 0.1});
+
+  observer.observe(resultContent);
+  if (shareCodeSection) observer.observe(shareCodeSection);
+
+  window._stickyCleanup = function() { observer.disconnect(); };
+}
+
+function toggleStickyExpand() {
+  var expanded = document.getElementById('stickyExpanded');
+  if (expanded) expanded.classList.toggle('open');
+}
+
+function copyStickyCode() {
+  var code = window._resultCode;
+  if (code && navigator.clipboard) {
+    navigator.clipboard.writeText(code).then(function() {
+      var btn = document.querySelector('.sticky-copy-btn');
+      if (btn) { btn.textContent = 'コピー済!'; setTimeout(function(){ btn.textContent = 'コピー'; }, 2000); }
+    });
+  }
+}
 </script>
 </body>
 </html>
